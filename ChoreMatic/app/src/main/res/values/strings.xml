@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">ChoreMatic</string>
     <string name="title_chore_detail">Chore Detail</string>
+
+    <string name="client_id">634794446313-7qhmo1tktl0ui0ip496et26o3mdnbruk.apps.googleusercontent.com</string>
 </resources>
