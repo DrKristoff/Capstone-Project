@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sidegigapps.chorematic">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -11,21 +11,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ChoreListActivity"
+            android:name=".activities.ChoreListActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ChoreDetailActivity"
+            android:name=".activities.ChoreDetailActivity"
             android:label="@string/title_chore_detail"
-            android:parentActivityName=".ChoreListActivity"
+            android:parentActivityName=".activities.ChoreListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sidegigapps.chorematic.ChoreListActivity" />
+                android:value="com.sidegigapps.chorematic.activities.ChoreListActivity" />
         </activity>
         <activity
-            android:name=".SignInActivity"
+            android:name=".activities.SignInActivity"
             android:label="Sign In"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -34,6 +33,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.ChooserActivity"
+            android:label="@string/title_activity_chooser"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.EmailPasswordActivity"
+            android:label="@string/title_activity_email_password"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.BaseActivity" />
+        <activity android:name=".activities.GoogleSignInActivity" />
+        <activity
+            android:name=".activities.SetupActivity"
+            android:label="@string/title_activity_setup"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

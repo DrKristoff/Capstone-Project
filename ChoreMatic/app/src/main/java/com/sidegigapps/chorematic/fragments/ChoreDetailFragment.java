@@ -1,4 +1,4 @@
-package com.sidegigapps.chorematic;
+package com.sidegigapps.chorematic.fragments;
 
 import android.app.Activity;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.sidegigapps.chorematic.activities.ChoreDetailActivity;
+import com.sidegigapps.chorematic.activities.ChoreListActivity;
+import com.sidegigapps.chorematic.R;
 import com.sidegigapps.chorematic.dummy.DummyContent;
 
 /**

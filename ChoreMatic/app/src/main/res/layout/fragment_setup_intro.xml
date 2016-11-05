@@ -1,0 +1,53 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.sidegigapps.chorematic.activities.SetupActivity$PlaceholderFragment">
+
+    <TextView
+        android:id="@+id/section_label"
+        android:layout_width="match_parent"
+        android:gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:background="@color/colorAccent"
+        android:textColor="@android:color/white"
+        android:text="Setup"
+        android:textSize="30sp" />
+
+    <RelativeLayout
+        android:id="@+id/homeImageLayout"
+        android:layout_width="400dp"
+        android:layout_height="400dp">
+
+        <TextView
+            android:id="@+id/numFloorsLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textSize="35sp"
+            android:layout_margin="15dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="Tell us about your home to get started" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/next_button"
+        android:layout_width="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:textColor="@color/colorAccent"
+        android:gravity="center_horizontal"
+        android:text="BEGIN"
+        android:textSize="36sp" />
+
+
+</RelativeLayout>

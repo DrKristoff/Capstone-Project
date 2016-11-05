@@ -1,12 +1,11 @@
-package com.sidegigapps.chorematic;
+package com.sidegigapps.chorematic.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -18,6 +17,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -25,6 +26,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.sidegigapps.chorematic.R;
+
+import jonathanfinerty.once.Once;
 
 /**
  * Created by ryand on 10/28/2016.
@@ -37,11 +41,18 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
+    String setupCompleted = "setupCompleted";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
         findViewById(R.id.sign_in_button).setOnClickListener(this);
+
+        Once.initialise(this);
+
+        //testing
+        findViewById(R.id.button2).setOnClickListener(this);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -52,6 +63,25 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 if (user != null) {
                     // User is signed in
                     Log.d("RCD", "onAuthStateChanged:signed_in:" + user.getUid());
+
+                    String name = user.getDisplayName();
+                    String email = user.getEmail();
+                    Uri photoUrl = user.getPhotoUrl();
+
+                    // The user's ID, unique to the Firebase project. Do NOT use this value to
+                    // authenticate with your backend server, if you have one. Use
+                    // FirebaseUser.getToken() instead.
+                    String uid = user.getUid();
+
+                    if (!Once.beenDone(Once.THIS_APP_INSTALL, setupCompleted)) {
+                        startActivity(new Intent(SignInActivity.this, SetupActivity.class));
+
+                        //mark as done on confirmation that setup is complete, not here
+                       //Once.markDone(setupCompleted);
+                    } else {
+                        startActivity(new Intent(SignInActivity.this, ChoreListActivity.class));
+                    }
+
                 } else {
                     // User is signed out
                     Log.d("RCD", "onAuthStateChanged:signed_out");
@@ -76,18 +106,52 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
 
+    // [START signin]
+    private void signIn() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+    // [END signin]
+
+    private void signOut() {
+        // Firebase sign out
+        mAuth.signOut();
+
+        // Google sign out
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+
+                    }
+                });
+    }
+
+    private void revokeAccess() {
+        // Firebase sign out
+        mAuth.signOut();
+
+        // Google revoke access
+        Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+
+                    }
+                });
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.sign_in_button:
                 signIn();
                 break;
+            case R.id.button2:
+                Intent intent = new Intent(SignInActivity.this, ChooserActivity.class);
+                startActivity(intent);
+                break;
         }
-    }
-
-    private void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     @Override
@@ -101,6 +165,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
+                handleSignInResult(result);
             } else {
                 // Google Sign In failed, update UI appropriately
                 // ...
@@ -167,4 +232,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             //updateUI(false);
         }
     }
+
+
 }

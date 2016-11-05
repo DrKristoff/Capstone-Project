@@ -1,4 +1,4 @@
-package com.sidegigapps.chorematic;
+package com.sidegigapps.chorematic.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +15,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
+import com.sidegigapps.chorematic.R;
 import com.sidegigapps.chorematic.dummy.DummyContent;
+import com.sidegigapps.chorematic.fragments.ChoreDetailFragment;
 
 import java.util.List;
 

@@ -1,0 +1,105 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/section_label"
+        android:layout_width="match_parent"
+        android:gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:background="@color/colorAccent"
+        android:textColor="@android:color/white"
+        android:text="@string/floor_details_instructions"
+        android:textSize="30sp" />
+
+    <LinearLayout
+        android:id="@+id/homeImageLayout"
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+
+        <CheckBox
+            android:text="Kitchen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/CheckBoxRoomSelect"
+            android:id="@+id/checkBoxKitchen" />
+
+        <CheckBox
+            android:text="Laundry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/CheckBoxRoomSelect"
+            android:id="@+id/checkBoxLaundry" />
+
+        <CheckBox
+            android:text="Living Room"
+            android:layout_width="match_parent"
+            style="@style/CheckBoxRoomSelect"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkBoxLivingRoom" />
+
+        <CheckBox
+            android:text="Bedroom"
+            android:layout_width="match_parent"
+            style="@style/CheckBoxRoomSelect"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkBoxBedroom" />
+
+        <CheckBox
+            android:text="Bathroom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/CheckBoxRoomSelect"
+            android:id="@+id/checkBoxBathroom" />
+
+        <CheckBox
+            android:text="Family Room"
+            android:layout_width="match_parent"
+            style="@style/CheckBoxRoomSelect"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkBoxFamilyRoom" />
+
+        <CheckBox
+            android:text="Dining Room"
+            android:layout_width="match_parent"
+            style="@style/CheckBoxRoomSelect"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkBoxDiningRoom" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:textColor="@color/colorAccent"
+        android:gravity="center_horizontal"
+        android:text="BACK"
+        android:textSize="36sp" />
+
+    <TextView
+        android:id="@+id/next_button"
+        android:layout_width="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:textColor="@color/colorAccent"
+        android:gravity="center_horizontal"
+        android:text="NEXT"
+        android:textSize="36sp" />
+
+
+</RelativeLayout>
