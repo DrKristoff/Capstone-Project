@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.sidegigapps.chorematic.activities.SetupActivity$PlaceholderFragment">
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/section_label"
@@ -17,6 +16,7 @@
         android:background="@color/colorAccent"
         android:textColor="@android:color/white"
         android:text="Number of Floors?"
+        android:elevation="4dp"
         android:textSize="30sp" />
 
     <RelativeLayout
@@ -34,9 +34,10 @@
 
         <ImageButton
             android:id="@+id/remove_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_centerVertical="true"
+            android:scaleType="fitXY"
             android:background="@null"
             android:layout_marginEnd="20dp"
             android:layout_toStartOf="@+id/numFloorsLabel"
@@ -44,10 +45,11 @@
 
         <ImageButton
             android:id="@+id/add_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="@null"
             android:layout_centerVertical="true"
+            android:scaleType="fitXY"
             android:layout_marginStart="20dp"
             android:layout_toEndOf="@+id/numFloorsLabel"
             android:src="@drawable/ic_add_circle_black_24dp" />
@@ -72,7 +74,7 @@
             android:layout_centerVertical="true"
             android:src="@drawable/roof"/>
 
-        <ImageButton
+        <ImageView
             android:id="@+id/floor0"
             android:layout_width="180dp"
             android:layout_height="70dp"
@@ -93,6 +95,7 @@
         android:layout_height="wrap_content"
         android:padding="20dp"
         android:textColor="@color/colorAccent"
+        android:clickable="true"
         android:gravity="center_horizontal"
         android:text="BACK"
         android:textSize="36sp" />
@@ -103,6 +106,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_height="wrap_content"
+        android:clickable="true"
         android:padding="20dp"
         android:textColor="@color/colorAccent"
         android:gravity="center_horizontal"

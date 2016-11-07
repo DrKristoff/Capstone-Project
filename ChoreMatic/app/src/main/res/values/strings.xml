@@ -64,8 +64,11 @@
     <string name="title_activity_setup">SetupActivity</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
-    <string name="floor_details_instructions">Mark all the rooms on the %1$s! Floor:</string>
+    <string name="floor_details_instructions">Mark all the rooms on the %1$s Floor:</string>
     <string name="num_floors_label">%1$d Floors</string>
+    <string name="main_floor_name">Main</string>
+    <string name="upstairs_floor_name">Upstairs</string>
+    <string name="downstairs_floor_name">Downstairs</string>
 
     <plurals name="numberOfFloors">
         <!--

@@ -1,27 +1,22 @@
 package com.sidegigapps.chorematic.activities;
 
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.sidegigapps.chorematic.R;
-import com.sidegigapps.chorematic.fragments.BaseFragment;
-import com.sidegigapps.chorematic.fragments.FloorDetailsFragment;
-import com.sidegigapps.chorematic.fragments.IdentifyMainFloorFragment;
-import com.sidegigapps.chorematic.fragments.NumFloorsFragment;
-import com.sidegigapps.chorematic.fragments.SetupIntroFragment;
+import com.sidegigapps.chorematic.Utils;
+import com.sidegigapps.chorematic.fragments.BaseSetupFragment;
+import com.sidegigapps.chorematic.fragments.FloorDetailsSetupFragment;
+import com.sidegigapps.chorematic.fragments.IdentifyMainFloorSetupFragment;
+import com.sidegigapps.chorematic.fragments.NumFloorsSetupFragment;
+import com.sidegigapps.chorematic.fragments.SetupIntroSetupFragment;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -35,35 +30,46 @@ public class SetupActivity extends BaseActivity {
      */
     private ViewPager mViewPager;
 
-    private int numFloors;
+    private int numFloors, mainFloorIndex;
     private String[] floorNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_setup);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         numFloors = 1;
+        mainFloorIndex = 0;
 
-        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);*/
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOffscreenPageLimit(1);
 
-
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
             }
-        });*/
+
+            @Override
+            public void onPageSelected(int position) {
+                mSectionsPagerAdapter.updateFragment(position);
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
     }
 
@@ -75,14 +81,38 @@ public class SetupActivity extends BaseActivity {
     }
 
     public void nextPage(){
+        if(mSectionsPagerAdapter.getCount()>mViewPager.getCurrentItem()){
+            mViewPager.setCurrentItem(mViewPager.getCurrentItem()+1);
+        }
+    }
 
+    public void previousPage(){
+        if(mViewPager.getCurrentItem()>0){
+            mViewPager.setCurrentItem(mViewPager.getCurrentItem()-1);
+        }
+    }
+
+    public void setMainFloorIndex(int num){
+        mainFloorIndex = num;
+        mSectionsPagerAdapter.initNumFloors(numFloors);
+        mSectionsPagerAdapter.notifyDataSetChanged();
     }
 
     public void setNumFloors(int num){
         numFloors = num;
         floorNames = new String[num];
-        mSectionsPagerAdapter.initNumFloors(num);
-        mSectionsPagerAdapter.notifyDataSetChanged();
+        if(num>1){
+            mSectionsPagerAdapter.addMainFloorIdentificationFragment();
+            mSectionsPagerAdapter.notifyDataSetChanged();
+        } else {
+            setMainFloorIndex(0);
+            //mSectionsPagerAdapter.setSingleFloor();
+        }
+
+    }
+
+    public int getNumFloors(){
+        return numFloors;
     }
 
     @Override
@@ -96,10 +126,12 @@ public class SetupActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
-        List<BaseFragment> fragments = new LinkedList<>();
-        List<BaseFragment> floorDetailsFragments = new LinkedList<>();
+        List<BaseSetupFragment> fragments = new LinkedList<>();
+        List<BaseSetupFragment> floorDetailsFragments = new LinkedList<>();
+
+        boolean singleFloor = false;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -107,26 +139,27 @@ public class SetupActivity extends BaseActivity {
         }
 
         private void init() {
-            fragments.add(new SetupIntroFragment());
-            fragments.add(new NumFloorsFragment());
-            fragments.add(new IdentifyMainFloorFragment());
+            fragments.add(new SetupIntroSetupFragment());
+            fragments.add(new NumFloorsSetupFragment());
         }
 
         public void initNumFloors(int numFloors){
             floorDetailsFragments.clear();
+            String [] floorNames = Utils.createFloorNames(numFloors,mainFloorIndex, SetupActivity.this);
             for(int i =0;i < numFloors;i++){
-                FloorDetailsFragment fragment = new FloorDetailsFragment();
+                FloorDetailsSetupFragment fragment = new FloorDetailsSetupFragment();
                 Bundle bundle = new Bundle();
                 bundle.putInt("index",i);
-                //bundle.putString("name",floorNames[i]);  FOR TESTING
-                bundle.putString("name","MAIN");
+                bundle.putString("description",floorNames[i]);
                 fragment.setArguments(bundle);
-                floorDetailsFragments.add(new FloorDetailsFragment());
+                floorDetailsFragments.add(fragment);
             }
+
+            notifyDataSetChanged();
         }
 
         @Override
-        public BaseFragment getItem(int position) {
+        public BaseSetupFragment getItem(int position) {
             if(position<fragments.size()){
                 return fragments.get(position);
             } else {
@@ -151,6 +184,16 @@ public class SetupActivity extends BaseActivity {
                     return "SECTION 3";
             }
             return null;
+        }
+
+
+        public void addMainFloorIdentificationFragment() {
+            fragments.add(new IdentifyMainFloorSetupFragment());
+        }
+
+        public void updateFragment(int position) {
+            BaseSetupFragment fragment = getItem(position);
+            fragment.update();
         }
     }
 }
