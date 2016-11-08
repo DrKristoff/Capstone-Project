@@ -48,8 +48,4 @@ public class MainFloorSetupFragment extends BaseSetupFragment implements View.On
 
     }
 
-    @Override
-    public void update() {
-
-    }
 }

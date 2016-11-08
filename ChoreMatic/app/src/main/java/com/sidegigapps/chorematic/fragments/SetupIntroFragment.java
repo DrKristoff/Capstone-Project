@@ -12,9 +12,9 @@ import com.sidegigapps.chorematic.activities.SetupActivity;
  * Created by ryand on 11/4/2016.
  */
 
-public class SetupIntroSetupFragment extends BaseSetupFragment implements View.OnClickListener {
+public class SetupIntroFragment extends BaseSetupFragment implements View.OnClickListener {
 
-    public SetupIntroSetupFragment() {
+    public SetupIntroFragment() {
     }
 
     @Override
@@ -38,8 +38,4 @@ public class SetupIntroSetupFragment extends BaseSetupFragment implements View.O
 
     }
 
-    @Override
-    public void update() {
-        //not used
-    }
 }

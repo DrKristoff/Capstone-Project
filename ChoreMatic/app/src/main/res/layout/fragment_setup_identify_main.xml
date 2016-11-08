@@ -61,6 +61,7 @@
             android:layout_toStartOf="@+id/numFloorsLabel"
             android:src="@drawable/roof"/>
 
+
 <!--       <ImageView
             android:id="@+id/floor0"
             android:layout_width="180dp"

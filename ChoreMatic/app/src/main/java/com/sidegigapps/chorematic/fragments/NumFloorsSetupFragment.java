@@ -1,8 +1,10 @@
 package com.sidegigapps.chorematic.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +39,9 @@ public class NumFloorsSetupFragment extends BaseSetupFragment implements View.On
         rootView.findViewById(R.id.next_button).setOnClickListener(this);
         rootView.findViewById(R.id.add_button).setOnClickListener(this);
         rootView.findViewById(R.id.remove_button).setOnClickListener(this);
-        rootView.findViewById(R.id.next_button).setOnClickListener(this);
+        rootView.findViewById(R.id.back_button).setOnClickListener(this);
+
+        numFloors = setupActivity.getNumFloors();
 
         homeImageLayout = (LinearLayout) rootView.findViewById(R.id.homeImageLayout);
 
@@ -77,26 +81,11 @@ public class NumFloorsSetupFragment extends BaseSetupFragment implements View.On
         }
         numFloors +=1;
         updateUI();
-
-        Context context = getActivity();
-        Resources resources = getResources();
-        ImageView newFloor= new ImageView(context);
-
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)resources.getDimension(R.dimen.floorIconWidth), (int)resources.getDimension(R.dimen.floorIconHeight));
-        params.gravity = Gravity.CENTER_HORIZONTAL;
-        newFloor.setBackground(resources.getDrawable(R.drawable.floor));
-        newFloor.setLayoutParams(params);
-        newFloor.setTag(String.valueOf(numFloors));
-        homeImageLayout.addView(newFloor);
-
     }
 
     private void removeFloor(){
         if(numFloors>1){
-            homeImageLayout.clearFocus();  //fixes bug where unfocus is called on null object
-            homeImageLayout.removeView(homeImageLayout.findViewWithTag(String.valueOf(numFloors)));
             numFloors-=1;
-
             updateUI();
         }
     }
@@ -105,10 +94,36 @@ public class NumFloorsSetupFragment extends BaseSetupFragment implements View.On
         Resources res = getResources();
         String floorsLabel = res.getQuantityString(R.plurals.numberOfFloors, numFloors, numFloors);
         floorsTextView.setText(floorsLabel);
+        resetHomeImageLayout();
     }
 
-    @Override
-    public void update() {
-
+    private void resetHomeImageLayout(){
+        homeImageLayout.removeAllViews();
+        addRoofLayout();
+        addFloorsToLayout();
     }
+
+    private void addRoofLayout(){
+        Resources resources = getResources();
+        ImageView roofImageView= new ImageView(getActivity());
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)resources.getDimension(R.dimen.roofIconWidth), (int)resources.getDimension(R.dimen.roofIconHeight));
+        params.gravity = Gravity.CENTER_HORIZONTAL;
+        roofImageView.setBackground(resources.getDrawable(R.drawable.roof));
+        roofImageView.setLayoutParams(params);
+        homeImageLayout.addView(roofImageView);
+    }
+
+    private void addFloorsToLayout() {
+        Resources resources = getResources();
+        for(int i = 0 ; i<numFloors;i++){
+            ImageView newFloor= new ImageView(getActivity());
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)resources.getDimension(R.dimen.floorIconWidth), (int)resources.getDimension(R.dimen.floorIconHeight));
+            params.gravity = Gravity.CENTER_HORIZONTAL;
+            newFloor.setBackground(resources.getDrawable(R.drawable.floor));
+            newFloor.setLayoutParams(params);
+            newFloor.setTag(String.valueOf(i));
+            homeImageLayout.addView(newFloor);
+        }
+    }
+
 }

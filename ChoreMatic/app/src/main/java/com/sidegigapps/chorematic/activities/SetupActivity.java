@@ -1,14 +1,15 @@
 package com.sidegigapps.chorematic.activities;
 
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 
 import com.sidegigapps.chorematic.R;
 import com.sidegigapps.chorematic.Utils;
@@ -16,19 +17,15 @@ import com.sidegigapps.chorematic.fragments.BaseSetupFragment;
 import com.sidegigapps.chorematic.fragments.FloorDetailsSetupFragment;
 import com.sidegigapps.chorematic.fragments.IdentifyMainFloorSetupFragment;
 import com.sidegigapps.chorematic.fragments.NumFloorsSetupFragment;
-import com.sidegigapps.chorematic.fragments.SetupIntroSetupFragment;
+import com.sidegigapps.chorematic.fragments.SetupIntroFragment;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class SetupActivity extends BaseActivity {
 
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
+    private FrameLayout fragmentFrameLayout;
+    FragmentController controller;
 
     private int numFloors, mainFloorIndex;
     private String[] floorNames;
@@ -46,30 +43,9 @@ public class SetupActivity extends BaseActivity {
         numFloors = 1;
         mainFloorIndex = 0;
 
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        fragmentFrameLayout = (FrameLayout) findViewById(R.id.setupFrameLayout);
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOffscreenPageLimit(1);
-
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                mSectionsPagerAdapter.updateFragment(position);
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+        controller = new FragmentController();
 
     }
 
@@ -81,34 +57,31 @@ public class SetupActivity extends BaseActivity {
     }
 
     public void nextPage(){
-        if(mSectionsPagerAdapter.getCount()>mViewPager.getCurrentItem()){
-            mViewPager.setCurrentItem(mViewPager.getCurrentItem()+1);
-        }
+        controller.nextPage();
     }
 
     public void previousPage(){
-        if(mViewPager.getCurrentItem()>0){
-            mViewPager.setCurrentItem(mViewPager.getCurrentItem()-1);
-        }
+        controller.previousPage();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        controller.currentPage=-1;
     }
 
     public void setMainFloorIndex(int num){
         mainFloorIndex = num;
-        mSectionsPagerAdapter.initNumFloors(numFloors);
-        mSectionsPagerAdapter.notifyDataSetChanged();
+        controller.setMainFloorIndex(num);
     }
 
     public void setNumFloors(int num){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.edit().putInt("numFloors",num).apply();
+
         numFloors = num;
         floorNames = new String[num];
-        if(num>1){
-            mSectionsPagerAdapter.addMainFloorIdentificationFragment();
-            mSectionsPagerAdapter.notifyDataSetChanged();
-        } else {
-            setMainFloorIndex(0);
-            //mSectionsPagerAdapter.setSingleFloor();
-        }
-
+        controller.setNumFloors(num);
     }
 
     public int getNumFloors(){
@@ -126,25 +99,43 @@ public class SetupActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
+    public class FragmentController{
 
-        List<BaseSetupFragment> fragments = new LinkedList<>();
-        List<BaseSetupFragment> floorDetailsFragments = new LinkedList<>();
+        LinkedList<BaseSetupFragment> fragments = new LinkedList<>();
+        LinkedList<BaseSetupFragment> floorDetailsFragments = new LinkedList<>();
+        private int currentPage = 0;
 
-        boolean singleFloor = false;
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
+        public FragmentController(){
             init();
+
         }
 
         private void init() {
-            fragments.add(new SetupIntroSetupFragment());
+
+            fragments.add(new SetupIntroFragment());
             fragments.add(new NumFloorsSetupFragment());
+
+            displayFragment();
         }
 
-        public void initNumFloors(int numFloors){
+        private void displayFragment(){
+            FragmentTransaction transaction =  getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.setupFrameLayout,getItem(currentPage));
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
+
+        public void setNumFloors(int numFloors){
             floorDetailsFragments.clear();
+            if(numFloors==1){
+                mainFloorIndex = 0;
+                createFloorDetailFragments();
+            } else {
+                floorDetailsFragments.add(new IdentifyMainFloorSetupFragment());
+            }
+        }
+
+        private void createFloorDetailFragments(){
             String [] floorNames = Utils.createFloorNames(numFloors,mainFloorIndex, SetupActivity.this);
             for(int i =0;i < numFloors;i++){
                 FloorDetailsSetupFragment fragment = new FloorDetailsSetupFragment();
@@ -154,11 +145,8 @@ public class SetupActivity extends BaseActivity {
                 fragment.setArguments(bundle);
                 floorDetailsFragments.add(fragment);
             }
-
-            notifyDataSetChanged();
         }
 
-        @Override
         public BaseSetupFragment getItem(int position) {
             if(position<fragments.size()){
                 return fragments.get(position);
@@ -168,32 +156,30 @@ public class SetupActivity extends BaseActivity {
 
         }
 
-        @Override
         public int getCount() {
             return fragments.size() + floorDetailsFragments.size();
         }
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "SECTION 1";
-                case 1:
-                    return "SECTION 2";
-                case 2:
-                    return "SECTION 3";
+
+        public void nextPage() {
+            if (currentPage<getCount()-1) {
+                currentPage +=1;
+                displayFragment();
             }
-            return null;
         }
 
-
-        public void addMainFloorIdentificationFragment() {
-            fragments.add(new IdentifyMainFloorSetupFragment());
+        public void previousPage() {
+            if (currentPage>0) {
+                currentPage -=1;
+                onBackPressed();
+            }
         }
 
-        public void updateFragment(int position) {
-            BaseSetupFragment fragment = getItem(position);
-            fragment.update();
+        public void setMainFloorIndex(int num) {
+            floorDetailsFragments.clear();
+            createFloorDetailFragments();
+            if(numFloors>1) floorDetailsFragments.addFirst(new IdentifyMainFloorSetupFragment());
         }
     }
+
 }

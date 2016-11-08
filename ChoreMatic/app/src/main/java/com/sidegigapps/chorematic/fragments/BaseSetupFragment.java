@@ -21,8 +21,6 @@ public abstract class BaseSetupFragment extends Fragment {
         setupActivity = ((SetupActivity)getActivity());
     }
 
-    public abstract void update();
-
     public String getFragmentQuestion(){
         return fragmentQuestion;
     }

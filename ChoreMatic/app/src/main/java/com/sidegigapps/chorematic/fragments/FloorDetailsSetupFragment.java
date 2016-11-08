@@ -34,11 +34,6 @@ public class FloorDetailsSetupFragment extends BaseSetupFragment implements View
     }
 
     @Override
-    public void update() {
-
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_setup_floor_details, container, false);

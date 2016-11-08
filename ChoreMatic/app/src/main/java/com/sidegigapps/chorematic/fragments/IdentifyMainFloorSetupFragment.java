@@ -1,7 +1,9 @@
 package com.sidegigapps.chorematic.fragments;
 
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +13,6 @@ import android.widget.LinearLayout;
 
 import com.sidegigapps.chorematic.R;
 import com.sidegigapps.chorematic.Utils;
-import com.sidegigapps.chorematic.activities.SetupActivity;
 
 /**
  * Created by ryand on 11/4/2016.
@@ -20,9 +21,20 @@ import com.sidegigapps.chorematic.activities.SetupActivity;
 public class IdentifyMainFloorSetupFragment extends BaseSetupFragment implements View.OnClickListener {
 
     private int numFloors;
+    private int mainFloorIndex;
     private LinearLayout homeImageLayout;
 
     View.OnClickListener listener;
+    SharedPreferences.OnSharedPreferenceChangeListener prefsListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+            if (s.equals("numFloors")) {
+                numFloors = sharedPreferences.getInt("numFloors", 1);
+                resetHomeImageLayout();
+            }
+        }
+
+    };
 
     public IdentifyMainFloorSetupFragment() {
     }
@@ -38,19 +50,19 @@ public class IdentifyMainFloorSetupFragment extends BaseSetupFragment implements
 
 
         numFloors = setupActivity.getNumFloors();
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sp.registerOnSharedPreferenceChangeListener(prefsListener);
 
         listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 for(int i = 0; i < numFloors;i++){
-                    homeImageLayout.findViewWithTag(String.valueOf(i))
-                            .setBackground(getResources().getDrawable(R.drawable.floor));
+                    View floorView = homeImageLayout.findViewWithTag(String.valueOf(i));
+                    floorView.setBackground(getResources().getDrawable(R.drawable.floor));
                 }
                 String viewTag = (String) view.getTag();
-                int mainFloorIndex = Integer.parseInt(viewTag);
-                setupActivity.setMainFloorIndex(mainFloorIndex);
-
+                mainFloorIndex = Integer.parseInt(viewTag);
                 view.setBackgroundColor(Utils.fetchAccentColor(getActivity()));
             }
         };
@@ -59,15 +71,23 @@ public class IdentifyMainFloorSetupFragment extends BaseSetupFragment implements
         return rootView;
     }
 
-    private void resetFloors(){
-        while(homeImageLayout.getChildCount()>2){
-            homeImageLayout.removeViewAt(2);
-        }
+    private void resetHomeImageLayout(){
+        homeImageLayout.removeAllViews();
+        addRoofLayout();
+        addFloorsToLayout();
+    }
 
+    private void addRoofLayout(){
+        Resources resources = getResources();
+        ImageView roofImageView= new ImageView(getActivity());
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)resources.getDimension(R.dimen.roofIconWidth), (int)resources.getDimension(R.dimen.roofIconHeight));
+        params.gravity = Gravity.CENTER_HORIZONTAL;
+        roofImageView.setBackground(resources.getDrawable(R.drawable.roof));
+        roofImageView.setLayoutParams(params);
+        homeImageLayout.addView(roofImageView);
     }
 
     private void addFloorsToLayout() {
-
         Resources resources = getResources();
         for(int i = (numFloors-1) ; i>=0;i--){
             ImageView newFloor= new ImageView(getActivity());
@@ -89,17 +109,16 @@ public class IdentifyMainFloorSetupFragment extends BaseSetupFragment implements
             case(R.id.back_button):
                 setupActivity.previousPage();
                 break;
-            case(R.id.next_button):{
+            case(R.id.next_button):
+                setupActivity.setMainFloorIndex(mainFloorIndex);
                 setupActivity.nextPage();
                 break;
-            }
+
         }
 
     }
 
-    @Override
     public void update() {
-        resetFloors();
-        addFloorsToLayout();
+        resetHomeImageLayout();
     }
 }
