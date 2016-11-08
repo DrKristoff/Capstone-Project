@@ -24,4 +24,6 @@ public abstract class BaseSetupFragment extends Fragment {
     public String getFragmentQuestion(){
         return fragmentQuestion;
     }
+
+
 }

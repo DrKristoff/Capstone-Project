@@ -25,18 +25,16 @@ public class IdentifyMainFloorSetupFragment extends BaseSetupFragment implements
     private LinearLayout homeImageLayout;
 
     View.OnClickListener listener;
-    SharedPreferences.OnSharedPreferenceChangeListener prefsListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-        @Override
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-            if (s.equals("numFloors")) {
-                numFloors = sharedPreferences.getInt("numFloors", 1);
-                resetHomeImageLayout();
-            }
-        }
-
-    };
 
     public IdentifyMainFloorSetupFragment() {
+    }
+
+    public static IdentifyMainFloorSetupFragment newInstance() {
+        IdentifyMainFloorSetupFragment fragment = new IdentifyMainFloorSetupFragment();
+        //Bundle args = new Bundle();
+        //args.putInt("index", index);
+        //fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -50,9 +48,6 @@ public class IdentifyMainFloorSetupFragment extends BaseSetupFragment implements
 
 
         numFloors = setupActivity.getNumFloors();
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        sp.registerOnSharedPreferenceChangeListener(prefsListener);
-
         listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {

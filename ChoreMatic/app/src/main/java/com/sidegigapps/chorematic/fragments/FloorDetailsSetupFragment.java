@@ -16,10 +16,16 @@ import com.sidegigapps.chorematic.activities.SetupActivity;
 
 public class FloorDetailsSetupFragment extends BaseSetupFragment implements View.OnClickListener {
 
-    private int floorIndex;
+    //private int floorIndex;
     private String description ="";
 
     public FloorDetailsSetupFragment() {
+    }
+
+    public static FloorDetailsSetupFragment newInstance() {
+        FloorDetailsSetupFragment fragment = new FloorDetailsSetupFragment();
+        //fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Override
@@ -28,7 +34,7 @@ public class FloorDetailsSetupFragment extends BaseSetupFragment implements View
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            floorIndex = bundle.getInt("index", 1);
+            //floorIndex = bundle.getInt("index", 1);
             description = bundle.getString("description");
         }
     }

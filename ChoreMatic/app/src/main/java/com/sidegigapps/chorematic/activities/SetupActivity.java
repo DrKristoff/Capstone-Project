@@ -3,8 +3,10 @@ package com.sidegigapps.chorematic.activities;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.util.ArrayMap;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -15,10 +17,12 @@ import com.sidegigapps.chorematic.R;
 import com.sidegigapps.chorematic.Utils;
 import com.sidegigapps.chorematic.fragments.BaseSetupFragment;
 import com.sidegigapps.chorematic.fragments.FloorDetailsSetupFragment;
+import com.sidegigapps.chorematic.fragments.FragmentHelper;
 import com.sidegigapps.chorematic.fragments.IdentifyMainFloorSetupFragment;
 import com.sidegigapps.chorematic.fragments.NumFloorsSetupFragment;
 import com.sidegigapps.chorematic.fragments.SetupIntroFragment;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -67,7 +71,8 @@ public class SetupActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        controller.currentPage=-1;
+        controller.currentPage-=1;
+        Log.d("RCD","Current Page: " + String.valueOf(controller.currentPage));
     }
 
     public void setMainFloorIndex(int num){
@@ -101,19 +106,22 @@ public class SetupActivity extends BaseActivity {
 
     public class FragmentController{
 
-        LinkedList<BaseSetupFragment> fragments = new LinkedList<>();
-        LinkedList<BaseSetupFragment> floorDetailsFragments = new LinkedList<>();
+        ArrayList<String> fragmentList = new ArrayList<>();
+        private static final String STRING_DIVISOR = "::";
+
         private int currentPage = 0;
 
         public FragmentController(){
             init();
-
         }
 
         private void init() {
 
-            fragments.add(new SetupIntroFragment());
-            fragments.add(new NumFloorsSetupFragment());
+            //fragments.add(new SetupIntroFragment());
+            //fragments.add(new NumFloorsSetupFragment());
+
+            fragmentList.add(FragmentHelper.SETUP_INTRO_FRAGMENT);
+            fragmentList.add(FragmentHelper.NUM_FLOOR_SETUP_FRAGMENT);
 
             displayFragment();
         }
@@ -126,59 +134,61 @@ public class SetupActivity extends BaseActivity {
         }
 
         public void setNumFloors(int numFloors){
-            floorDetailsFragments.clear();
+            fragmentList.subList(2, fragmentList.size()).clear();
             if(numFloors==1){
                 mainFloorIndex = 0;
                 createFloorDetailFragments();
             } else {
-                floorDetailsFragments.add(new IdentifyMainFloorSetupFragment());
+                fragmentList.add(FragmentHelper.IDENTIFY_MAIN_FLOOR_FRAGMENT);
             }
         }
 
         private void createFloorDetailFragments(){
             String [] floorNames = Utils.createFloorNames(numFloors,mainFloorIndex, SetupActivity.this);
             for(int i =0;i < numFloors;i++){
-                FloorDetailsSetupFragment fragment = new FloorDetailsSetupFragment();
-                Bundle bundle = new Bundle();
-                bundle.putInt("index",i);
-                bundle.putString("description",floorNames[i]);
-                fragment.setArguments(bundle);
-                floorDetailsFragments.add(fragment);
+                String floorDescription = floorNames[i];
+                fragmentList.add(FragmentHelper.FLOOR_DETAILS_SETUP_FRAGMENT
+                        + STRING_DIVISOR + floorDescription);
             }
         }
 
         public BaseSetupFragment getItem(int position) {
-            if(position<fragments.size()){
-                return fragments.get(position);
-            } else {
-                return floorDetailsFragments.get(position-fragments.size());
+            if(position>fragmentList.size()){
+                return null;
             }
 
-        }
+            String fragmentString = fragmentList.get(position);
 
-        public int getCount() {
-            return fragments.size() + floorDetailsFragments.size();
+            if(fragmentString.contains(STRING_DIVISOR)){
+                BaseSetupFragment fragment = FragmentHelper.getSetupFragmentByString(FragmentHelper.FLOOR_DETAILS_SETUP_FRAGMENT);
+                Bundle bundle = new Bundle();
+                bundle.putString("description",fragmentString.split(STRING_DIVISOR)[1]);
+                fragment.setArguments(bundle);
+                return fragment;
+            } else {
+                return FragmentHelper.getSetupFragmentByString(fragmentString);
+            }
         }
 
 
         public void nextPage() {
-            if (currentPage<getCount()-1) {
+            if (currentPage<fragmentList.size()-1) {
                 currentPage +=1;
+                Log.d("RCD","Current Page: " + String.valueOf(currentPage));
                 displayFragment();
             }
         }
 
         public void previousPage() {
             if (currentPage>0) {
-                currentPage -=1;
+                Log.d("RCD","Current Page: " + String.valueOf(currentPage));
                 onBackPressed();
             }
         }
 
         public void setMainFloorIndex(int num) {
-            floorDetailsFragments.clear();
+            fragmentList.subList(3, fragmentList.size()).clear();
             createFloorDetailFragments();
-            if(numFloors>1) floorDetailsFragments.addFirst(new IdentifyMainFloorSetupFragment());
         }
     }
 

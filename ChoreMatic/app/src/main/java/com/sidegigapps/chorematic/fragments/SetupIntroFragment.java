@@ -38,4 +38,11 @@ public class SetupIntroFragment extends BaseSetupFragment implements View.OnClic
 
     }
 
+    public static SetupIntroFragment newInstance() {
+        SetupIntroFragment fragment = new SetupIntroFragment();
+        //Bundle args = new Bundle();
+        //args.putInt("index", index);
+        //fragment.setArguments(args);
+        return fragment;
+    }
 }

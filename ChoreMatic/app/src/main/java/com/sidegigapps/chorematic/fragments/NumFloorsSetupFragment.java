@@ -32,6 +32,14 @@ public class NumFloorsSetupFragment extends BaseSetupFragment implements View.On
     public NumFloorsSetupFragment() {
     }
 
+    public static NumFloorsSetupFragment newInstance() {
+        NumFloorsSetupFragment fragment = new NumFloorsSetupFragment();
+        //Bundle args = new Bundle();
+        //args.putInt("index", index);
+        //fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
