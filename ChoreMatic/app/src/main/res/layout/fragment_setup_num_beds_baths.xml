@@ -10,45 +10,13 @@
         android:layout_width="match_parent"
         android:gravity="center_horizontal"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
         android:background="@color/colorAccent"
         android:textColor="@android:color/white"
-        android:text="Number of Floors?"
+        android:text="@string/setup_num_bed_bath_string"
         android:elevation="4dp"
         android:textSize="30sp" />
-
-    <LinearLayout
-        android:id="@+id/homeImageLayout"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_above="@+id/navigation_card_view"
-        android:layout_alignParentEnd="true">
-
-        <ImageView
-            android:id="@+id/imageViewRoof"
-            android:layout_width="240dp"
-            android:layout_height="100dp"
-            android:scaleType="fitXY"
-            android:layout_gravity="center_horizontal"
-            android:layout_centerVertical="true"
-            android:src="@drawable/roof"/>
-
-        <ImageView
-            android:id="@+id/floor0"
-            android:layout_width="180dp"
-            android:layout_height="70dp"
-            android:scaleType="fitXY"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center_horizontal"
-            android:background="@null"
-            android:layout_toStartOf="@+id/numFloorsLabel"
-            android:src="@drawable/floor"/>
-
-    </LinearLayout>
 
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -92,10 +60,10 @@
 
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/numBedroomsCardView"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
         android:layout_below="@id/section_label"
         android:animateLayoutChanges="true"
         android:layout_alignParentStart="true">
@@ -103,35 +71,123 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="80dp"
-                android:layout_gravity="center_vertical"
-                app:srcCompat="@drawable/one_selected"
-                android:id="@+id/imageViewOne" />
+            <TextView
+                android:id="@+id/bedroom_label"
+                android:layout_width="match_parent"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:layout_below="@id/section_label"
+                android:text="Bedrooms"
+                android:elevation="4dp"
+                android:textSize="30sp" />
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="80dp"
-                android:layout_gravity="center_vertical"
-                app:srcCompat="@drawable/two"
-                android:id="@+id/imageViewTwo" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="20dp"
+                android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="80dp"
-                android:layout_gravity="center_vertical"
-                app:srcCompat="@drawable/three"
-                android:id="@+id/imageViewThree" />
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center_vertical"
+                    app:srcCompat="@drawable/one_selected"
+                    android:id="@+id/imageViewOneBedroom" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center_vertical"
+                    app:srcCompat="@drawable/two"
+                    android:id="@+id/imageViewTwoBedrooms" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center_vertical"
+                    app:srcCompat="@drawable/three"
+                    android:id="@+id/imageViewThreeBedrooms" />
+
+
+            </LinearLayout>
 
 
         </LinearLayout>
 
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/numBathroomsCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@id/numBedroomsCardView"
+        android:animateLayoutChanges="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/bathroomLabel"
+                android:layout_width="match_parent"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:layout_below="@id/numBedroomsCardView"
+                android:text="Bathrooms"
+                android:elevation="4dp"
+                android:textSize="30sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="20dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center_vertical"
+                    app:srcCompat="@drawable/one_selected"
+                    android:id="@+id/imageViewOneBathroom" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center_vertical"
+                    app:srcCompat="@drawable/two"
+                    android:id="@+id/imageViewTwoBathrooms" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center_vertical"
+                    app:srcCompat="@drawable/three"
+                    android:id="@+id/imageViewThreeBathrooms" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
 
 
     </android.support.v7.widget.CardView>

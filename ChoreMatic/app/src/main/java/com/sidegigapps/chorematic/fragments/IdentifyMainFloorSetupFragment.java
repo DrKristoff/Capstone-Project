@@ -23,6 +23,7 @@ public class IdentifyMainFloorSetupFragment extends BaseSetupFragment implements
     private int numFloors;
     private int mainFloorIndex;
     private LinearLayout homeImageLayout;
+    private LinearLayout.LayoutParams params;
 
     View.OnClickListener listener;
 
@@ -46,19 +47,25 @@ public class IdentifyMainFloorSetupFragment extends BaseSetupFragment implements
 
         homeImageLayout = (LinearLayout) rootView.findViewById(R.id.homeImageLayout);
 
+        setFloorLayoutParams();
 
         numFloors = setupActivity.getNumFloors();
         listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                Resources resources = getResources();
+
                 for(int i = 0; i < numFloors;i++){
                     View floorView = homeImageLayout.findViewWithTag(String.valueOf(i));
-                    floorView.setBackground(getResources().getDrawable(R.drawable.floor));
+                    (floorView).setBackground(resources.getDrawable(R.drawable.floor));
+                    floorView.setLayoutParams(params);
                 }
                 String viewTag = (String) view.getTag();
                 mainFloorIndex = Integer.parseInt(viewTag);
-                view.setBackgroundColor(Utils.fetchAccentColor(getActivity()));
+                view.setBackground(resources.getDrawable(R.drawable.floor_selected));
+                view.setLayoutParams(params);
+
             }
         };
 
@@ -72,11 +79,15 @@ public class IdentifyMainFloorSetupFragment extends BaseSetupFragment implements
         addFloorsToLayout();
     }
 
+    private void setFloorLayoutParams(){
+        Resources resources = getResources();
+        params = new LinearLayout.LayoutParams((int)resources.getDimension(R.dimen.floorIconWidth), (int)resources.getDimension(R.dimen.floorIconHeight));
+        params.gravity = Gravity.CENTER_HORIZONTAL;
+    }
+
     private void addRoofLayout(){
         Resources resources = getResources();
         ImageView roofImageView= new ImageView(getActivity());
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)resources.getDimension(R.dimen.roofIconWidth), (int)resources.getDimension(R.dimen.roofIconHeight));
-        params.gravity = Gravity.CENTER_HORIZONTAL;
         roofImageView.setBackground(resources.getDrawable(R.drawable.roof));
         roofImageView.setLayoutParams(params);
         homeImageLayout.addView(roofImageView);
@@ -86,8 +97,6 @@ public class IdentifyMainFloorSetupFragment extends BaseSetupFragment implements
         Resources resources = getResources();
         for(int i = (numFloors-1) ; i>=0;i--){
             ImageView newFloor= new ImageView(getActivity());
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)resources.getDimension(R.dimen.floorIconWidth), (int)resources.getDimension(R.dimen.floorIconHeight));
-            params.gravity = Gravity.CENTER_HORIZONTAL;
             newFloor.setBackground(resources.getDrawable(R.drawable.floor));
             newFloor.setLayoutParams(params);
             newFloor.setTag(String.valueOf(i));

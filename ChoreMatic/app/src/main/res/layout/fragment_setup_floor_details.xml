@@ -11,15 +11,14 @@
         android:gravity="center_horizontal"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
+        android:padding="25dp"
         android:background="@color/colorAccent"
         android:textColor="@android:color/white"
         android:text="@string/floor_details_instructions"
         android:textSize="30sp" />
 
     <LinearLayout
-        android:id="@+id/homeImageLayout"
+        android:id="@+id/roomsLayout"
         android:layout_width="wrap_content"
         android:orientation="vertical"
         android:layout_height="wrap_content"

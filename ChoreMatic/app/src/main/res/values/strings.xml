@@ -69,6 +69,7 @@
     <string name="main_floor_name">Main</string>
     <string name="upstairs_floor_name">Upstairs</string>
     <string name="downstairs_floor_name">Downstairs</string>
+    <string name="setup_num_bed_bath_string">%1$s Floor: How many?</string>
 
     <plurals name="numberOfFloors">
         <!--

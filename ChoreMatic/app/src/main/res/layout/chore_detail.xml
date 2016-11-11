@@ -1,9 +1,145 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/chore_detail"
-    style="?android:attr/textAppearanceLarge"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical|center_horizontal"
+    android:layout_margin="15dp"
+    android:elevation="8dp"
     android:padding="16dp"
     android:textIsSelectable="true"
-    tools:context="com.sidegigapps.chorematic.fragments.ChoreDetailFragment" />
+    tools:context="com.sidegigapps.chorematic.fragments.ChoreDetailFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/colorAccent"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="CHORE DESCRIPTION"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+
+            android:textColor="@android:color/white" />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/colorAccent"
+            android:showDividers="end">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@color/colorAccent"
+                android:showDividers="end">
+
+                <TextView
+                    style="@style/ChoreDetailData"
+                    android:text="Floor Name" />
+
+                <TextView
+                    style="@style/ChoreDetailData"
+                    android:text="Room Name" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/ChoreDetailLabel"
+                    android:text="FLOOR" />
+
+                <TextView
+                    style="@style/ChoreDetailLabel"
+                    android:text="ROOM" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    style="@style/ChoreDetailData"
+                    android:src="@drawable/ic_high" />
+
+                <TextView
+                    style="@style/ChoreDetailData"
+                    android:text="Frequency Data" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/ChoreDetailLabel"
+                    android:text="EFFORT" />
+
+                <TextView
+                    style="@style/ChoreDetailLabel"
+                    android:text="FREQUENCY" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/ChoreDetailData"
+                    android:text="Last Timestamp" />
+
+                <TextView
+                    style="@style/ChoreDetailData"
+                    android:text="Next Timestamp" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/ChoreDetailLabel"
+                    android:text="LAST" />
+
+                <TextView
+                    style="@style/ChoreDetailLabel"
+                    android:text="NEXT" />
+
+            </TableRow>
+
+            <TableRow>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_height="1px"
+                    android:layout_weight="1"
+                    android:background="@color/colorAccent"></View>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/ChoreDetailNotes"
+                    android:text="NOTES:" />
+
+            </TableRow>
+        </TableLayout>
+
+
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>

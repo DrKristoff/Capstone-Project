@@ -1,5 +1,6 @@
 package com.sidegigapps.chorematic.fragments;
 
+import android.animation.LayoutTransition;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +28,7 @@ public class NumFloorsSetupFragment extends BaseSetupFragment implements View.On
     private int numFloors =1;
 
     TextView floorsTextView;
+    View rootView;
 
     LinearLayout homeImageLayout;
 
@@ -43,18 +46,23 @@ public class NumFloorsSetupFragment extends BaseSetupFragment implements View.On
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_setup_num_floors, container, false);
+        rootView = inflater.inflate(R.layout.fragment_setup_num_floors, container, false);
         rootView.findViewById(R.id.next_button).setOnClickListener(this);
         rootView.findViewById(R.id.add_button).setOnClickListener(this);
         rootView.findViewById(R.id.remove_button).setOnClickListener(this);
         rootView.findViewById(R.id.back_button).setOnClickListener(this);
 
-        numFloors = setupActivity.getNumFloors();
+        rootView.findViewById(R.id.imageViewOne).setOnClickListener(this);
+        rootView.findViewById(R.id.imageViewTwo).setOnClickListener(this);
+        rootView.findViewById(R.id.imageViewThree).setOnClickListener(this);
 
+        numFloors = setupActivity.getNumFloors();
         homeImageLayout = (LinearLayout) rootView.findViewById(R.id.homeImageLayout);
 
         floorsTextView = (TextView) rootView.findViewById(R.id.numFloorsLabel);
         updateUI();
+
+        setNumFloors(numFloors);
 
         return rootView;
     }
@@ -64,6 +72,15 @@ public class NumFloorsSetupFragment extends BaseSetupFragment implements View.On
         int id = view.getId();
 
         switch(id){
+            case (R.id.imageViewOne):
+                setNumFloors(1);
+                break;
+            case (R.id.imageViewTwo):
+                setNumFloors(2);
+                break;
+            case (R.id.imageViewThree):
+                setNumFloors(3);
+                break;
             case (R.id.add_button):
                 addFloor();
                 break;
@@ -74,12 +91,39 @@ public class NumFloorsSetupFragment extends BaseSetupFragment implements View.On
                 setupActivity.setNumFloors(numFloors);
                 setupActivity.nextPage();
                 break;
-
             case(R.id.back_button):
                 setupActivity.previousPage();
                 break;
             }
 
+    }
+
+    private void highlightSelectedNumber(int number){
+        removeSelectedNumbers();
+        switch(number){
+            case 1:
+                ((ImageView)rootView.findViewById(R.id.imageViewOne)).setImageResource(R.drawable.one_selected);
+                break;
+            case 2:
+                ((ImageView)rootView.findViewById(R.id.imageViewTwo)).setImageResource(R.drawable.two_selected);
+                break;
+
+            case 3:
+                ((ImageView)rootView.findViewById(R.id.imageViewThree)).setImageResource(R.drawable.three_selected);
+                break;
+        }
+    }
+
+    private void removeSelectedNumbers(){
+        ((ImageView)rootView.findViewById(R.id.imageViewOne)).setImageResource(R.drawable.one);
+        ((ImageView)rootView.findViewById(R.id.imageViewTwo)).setImageResource(R.drawable.two);
+        ((ImageView)rootView.findViewById(R.id.imageViewThree)).setImageResource(R.drawable.three);
+    }
+
+    private void setNumFloors(int num){
+        numFloors = num;
+        highlightSelectedNumber(num);
+        updateUI();
     }
 
     private void addFloor(){
