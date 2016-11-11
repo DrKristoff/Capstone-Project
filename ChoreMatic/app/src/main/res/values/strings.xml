@@ -82,4 +82,12 @@
         <item quantity="one">%d Floor</item>
         <item quantity="other">%d Floors</item>
     </plurals>
+
+    <string name="kitchen_string">Kitchen</string>
+    <string name="laundry_string">Laundry</string>
+    <string name="living_room_string">Living Room</string>
+    <string name="bedroom_string">Bedroom</string>
+    <string name="bathroom_string">Bathroom</string>
+    <string name="family_room_string">Family Room</string>
+    <string name="dining_room_string">Dining Room</string>
 </resources>

@@ -13,17 +13,19 @@ import android.widget.FrameLayout;
 
 import com.sidegigapps.chorematic.R;
 import com.sidegigapps.chorematic.Utils;
+import com.sidegigapps.chorematic.database.DatabaseSetupAsyncTask;
 import com.sidegigapps.chorematic.fragments.BaseSetupFragment;
 import com.sidegigapps.chorematic.fragments.FragmentHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SetupActivity extends BaseActivity {
 
     private FrameLayout fragmentFrameLayout;
     FragmentController controller;
 
-    ArrayList<ArrayList<String>> roomsList = new ArrayList<>();
+    ArrayList<HashMap<String,Integer>> roomsList = new ArrayList<>();
 
     private int numFloors, mainFloorIndex;
     private String[] floorNames;
@@ -102,12 +104,26 @@ public class SetupActivity extends BaseActivity {
 
         //clear rooms with greater floor index, in case back button is pressed while selecting rooms
         roomsList.subList(floorIndex, roomsList.size()).clear();
-        roomsList.add(roomsSelected);
+        HashMap <String,Integer> newFloorMap = new HashMap<>();
+
+        for(String room : roomsSelected){
+            newFloorMap.put(room,1);
+        }
+
+        roomsList.add(floorIndex, newFloorMap);
 
         if(floorIndex==numFloors-1){
             controller.storeNumBedsAndBathsFragmentsData();
         }
+    }
 
+    public void updateNumBedsAndBaths(int floorIndex, String room, int num){
+        HashMap<String, Integer> floorMap = roomsList.get(floorIndex);
+        floorMap.put(room,num);
+
+        if(floorIndex==numFloors-1){
+            controller.setupDatabase();
+        }
     }
 
     public class FragmentController{
@@ -162,10 +178,10 @@ public class SetupActivity extends BaseActivity {
             for(int i =0;i < numFloors;i++){
                 String floorDescription = floorNames[i];
 
-                ArrayList<String> roomList = roomsList.get(i);
+                HashMap<String,Integer> roomMap = roomsList.get(i);
 
-                boolean floorHasBedrooms = roomList.contains("Bedroom");
-                boolean floorHasBathrooms = roomList.contains("Bathroom");
+                boolean floorHasBedrooms = roomMap.containsKey("Bedroom");
+                boolean floorHasBathrooms = roomMap.containsKey("Bathroom");
 
                 fragmentList.add(FragmentHelper.SETUP_NUM_BEDS_BATHS
                         + STRING_DIVISOR + floorDescription
@@ -225,6 +241,12 @@ public class SetupActivity extends BaseActivity {
         public void setMainFloorIndex(int num) {
             fragmentList.subList(3, fragmentList.size()).clear();
             storeDetailFragmentsData();
+        }
+
+        public void setupDatabase() {
+
+            DatabaseSetupAsyncTask task = new DatabaseSetupAsyncTask();
+            DatabaseSetupAsyncTask.createDatabase(roomsList);
         }
     }
 
