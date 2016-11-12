@@ -1,0 +1,10 @@
+description,Frequency,Effort,Room
+Vacuum,3 days,low,Living Room
+Vacuum,3 days,low,Bedroom
+Vacuum,3 days,low,Family Room
+Sweep Floors,3 days,low,Dining Room
+Deep Clean Oven,3 months,high,Kitchen
+Wipe Counters,1 day,low,Kitchen
+Sweep Floors,3 days,low,Laundry
+Clean Toilet,1 day,low,Bathroom
+Clean Toilet with Chemicals,7 days,low,Bathroom

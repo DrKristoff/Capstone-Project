@@ -1,6 +1,10 @@
 package com.sidegigapps.chorematic.activities;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
@@ -13,12 +17,19 @@ import android.widget.FrameLayout;
 
 import com.sidegigapps.chorematic.R;
 import com.sidegigapps.chorematic.Utils;
-import com.sidegigapps.chorematic.database.DatabaseSetupAsyncTask;
+import com.sidegigapps.chorematic.database.ChoreContract;
+import com.sidegigapps.chorematic.database.ChoreDBHelper;
 import com.sidegigapps.chorematic.fragments.BaseSetupFragment;
 import com.sidegigapps.chorematic.fragments.FragmentHelper;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Vector;
 
 public class SetupActivity extends BaseActivity {
 
@@ -224,11 +235,16 @@ public class SetupActivity extends BaseActivity {
 
 
         public void nextPage() {
-            if (currentPage<fragmentList.size()-1) {
+            setupChoreTemplateDBFromCSV();
+
+            runTestQuery();
+
+
+            /*if (currentPage<fragmentList.size()-1) {
                 currentPage +=1;
                 Log.d("RCD","Current Page: " + String.valueOf(currentPage));
                 displayFragment();
-            }
+            }*/
         }
 
         public void previousPage() {
@@ -245,9 +261,102 @@ public class SetupActivity extends BaseActivity {
 
         public void setupDatabase() {
 
-            DatabaseSetupAsyncTask task = new DatabaseSetupAsyncTask();
-            DatabaseSetupAsyncTask.createDatabase(roomsList);
+            setupChoreTemplateDBFromCSV();
+
+            ChoreDBHelper helper = new ChoreDBHelper(getApplicationContext());
+
+            //ArrayList<HashMap<String,Integer>> roomsList
+
+            Vector<ContentValues> roomsVector = new Vector<ContentValues>(roomsList.size());
+            Vector<ContentValues> floorsVector = new Vector<ContentValues>(numFloors);
+
+            //Vector<ContentValues> choresVector = new Vector<ContentValues>(roomsList.size());
+
+            ContentValues roomValues = new ContentValues();
+            ContentValues floorValues = new ContentValues();
+
+            for(int i = 0; i < roomsList.size();i++){{
+                HashMap<String, Integer> floorRoomsMap = roomsList.get(i);
+
+                floorValues.put(ChoreContract.FloorsEntry.INDEX,i);
+                floorValues.put(ChoreContract.FloorsEntry.DESCRIPTION,floorNames[i]);
+
+                for(String room : floorRoomsMap.keySet()){
+                    roomValues.put(ChoreContract.RoomsEntry.DESCRIPTION,room);
+                    roomValues.put(ChoreContract.RoomsEntry.FLOOR_INDEX,i);
+                    //roomValues.put(ChoreContract.RoomsEntry.TEMPLATE,template);
+
+                }
+
+                }
+
+
+
+
+
+                floorsVector.add(floorValues);
+            }
+
+
+            //ContentValues roomValues = new ContentValues();
+
+            //roomValues.put(ChoreContract.RoomsEntry.DESCRIPTION,)
         }
+    }
+
+    private void runTestQuery() {
+        ChoreDBHelper helper = new ChoreDBHelper(this);
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        Cursor cursor = db.query(ChoreContract.ChoresEntry.TABLE_NAME, new String[] {"_id", ChoreDBHelper.CHORES_TEMPLATE_COLUMN_DESCRIPTION, ChoreDBHelper.CHORES_TEMPLATE_COLUMN_FREQUENCY,
+                        ChoreDBHelper.CHORES_TEMPLATE_COLUMN_EFFORT,ChoreDBHelper.CHORES_TEMPLATE_COLUMN_ROOM},
+                 null, null, null, null, null);
+
+        if (cursor.moveToFirst()){
+            while(!cursor.isAfterLast()){
+                String data = cursor.getString(cursor.getColumnIndex("description"));
+                Log.d("RCD",data);
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+
+    }
+
+    private void setupChoreTemplateDBFromCSV(){
+
+        ChoreDBHelper helper = new ChoreDBHelper(this);
+
+
+
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        InputStream is;
+
+        try {
+            is = getAssets().open("chores.csv");
+            BufferedReader buffer = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+            String line = "";
+            db.beginTransaction();
+            while ((line = buffer.readLine()) != null) {
+                String[] columns = line.split(",");
+                if (columns.length != 4) {
+                    Log.d("CSVParser", "Skipping Bad CSV Row");
+                    continue;
+                }
+                ContentValues cv = new ContentValues(5);
+                cv.put(ChoreDBHelper.CHORES_TEMPLATE_COLUMN_DESCRIPTION, columns[0].trim());
+                cv.put(ChoreDBHelper.CHORES_TEMPLATE_COLUMN_FREQUENCY, columns[1].trim());
+                cv.put(ChoreDBHelper.CHORES_TEMPLATE_COLUMN_EFFORT, columns[2].trim());
+                cv.put(ChoreDBHelper.CHORES_TEMPLATE_COLUMN_ROOM, columns[3].trim());
+                db.insert(ChoreContract.ChoresEntry.TABLE_NAME, null, cv);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+
     }
 
 }
