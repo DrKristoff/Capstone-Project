@@ -1,7 +1,6 @@
 package com.sidegigapps.chorematic.activities;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -28,7 +27,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Vector;
 
 public class SetupActivity extends BaseActivity {
@@ -37,6 +35,7 @@ public class SetupActivity extends BaseActivity {
     FragmentController controller;
 
     ArrayList<HashMap<String,Integer>> roomsList = new ArrayList<>();
+    ChoreDBHelper helper;
 
     private int numFloors, mainFloorIndex;
     private String[] floorNames;
@@ -57,6 +56,8 @@ public class SetupActivity extends BaseActivity {
         fragmentFrameLayout = (FrameLayout) findViewById(R.id.setupFrameLayout);
 
         controller = new FragmentController();
+
+        setupChoreTemplateDBFromCSV();
 
     }
 
@@ -235,16 +236,11 @@ public class SetupActivity extends BaseActivity {
 
 
         public void nextPage() {
-            setupChoreTemplateDBFromCSV();
-
-            runTestQuery();
-
-
-            /*if (currentPage<fragmentList.size()-1) {
+            if (currentPage<fragmentList.size()-1) {
                 currentPage +=1;
                 Log.d("RCD","Current Page: " + String.valueOf(currentPage));
                 displayFragment();
-            }*/
+            }
         }
 
         public void previousPage() {
@@ -261,61 +257,154 @@ public class SetupActivity extends BaseActivity {
 
         public void setupDatabase() {
 
-            setupChoreTemplateDBFromCSV();
-
-            ChoreDBHelper helper = new ChoreDBHelper(getApplicationContext());
+            helper = new ChoreDBHelper(getApplicationContext());
 
             //ArrayList<HashMap<String,Integer>> roomsList
 
-            Vector<ContentValues> roomsVector = new Vector<ContentValues>(roomsList.size());
+
             Vector<ContentValues> floorsVector = new Vector<ContentValues>(numFloors);
 
-            //Vector<ContentValues> choresVector = new Vector<ContentValues>(roomsList.size());
+            String [] floorNames = Utils.createFloorNames(numFloors,mainFloorIndex, SetupActivity.this);
 
-            ContentValues roomValues = new ContentValues();
-            ContentValues floorValues = new ContentValues();
-
-            for(int i = 0; i < roomsList.size();i++){{
+            for(int i = 0; i < roomsList.size();i++){
                 HashMap<String, Integer> floorRoomsMap = roomsList.get(i);
+                Vector<ContentValues> roomsVector = new Vector<ContentValues>(floorRoomsMap.size());
+                ContentValues floorValues = new ContentValues();
 
+                //Add floor
                 floorValues.put(ChoreContract.FloorsEntry.INDEX,i);
                 floorValues.put(ChoreContract.FloorsEntry.DESCRIPTION,floorNames[i]);
-
-                for(String room : floorRoomsMap.keySet()){
-                    roomValues.put(ChoreContract.RoomsEntry.DESCRIPTION,room);
-                    roomValues.put(ChoreContract.RoomsEntry.FLOOR_INDEX,i);
-                    //roomValues.put(ChoreContract.RoomsEntry.TEMPLATE,template);
-
-                }
-
-                }
-
-
-
-
-
                 floorsVector.add(floorValues);
+
+                //Add rooms
+                for(String room : floorRoomsMap.keySet()){
+                    ContentValues roomValues = new ContentValues();
+                    roomValues.put(ChoreContract.RoomsEntry.COLUMN_DESCRIPTION,room);
+                    roomValues.put(ChoreContract.RoomsEntry.COLUMN_FLOOR_INDEX,i);
+                    roomValues.put(ChoreContract.RoomsEntry.COLUMN_TEMPLATE,room);
+                    roomsVector.add(roomValues);
+
+                    if ( roomsVector.size() > 0 ) {
+                        ContentValues[] roomsArray = new ContentValues[roomsVector.size()];
+                        roomsVector.toArray(roomsArray);
+                        getContentResolver().bulkInsert(ChoreContract.RoomsEntry.CONTENT_URI, roomsArray);
+                    }
+                }
+
+
+
+
             }
 
+            if ( floorsVector.size() > 0 ) {
+                ContentValues[] floorsArray = new ContentValues[floorsVector.size()];
+                floorsVector.toArray(floorsArray);
+                getContentResolver().bulkInsert(ChoreContract.FloorsEntry.CONTENT_URI, floorsArray);
+            }
 
-            //ContentValues roomValues = new ContentValues();
+            //create Chores Database
 
-            //roomValues.put(ChoreContract.RoomsEntry.DESCRIPTION,)
+            //read in rooms with their ids
+            SQLiteDatabase db = helper.getReadableDatabase();
+            String[] ROOM_PROJECTION = new String[] {
+                    "_id",
+                    ChoreContract.RoomsEntry.COLUMN_DESCRIPTION,
+                    ChoreContract.RoomsEntry.COLUMN_TEMPLATE
+            };
+            Cursor cursor = db.query(ChoreContract.RoomsEntry.TABLE_NAME, ROOM_PROJECTION,
+                    null, null, null, null, null);
+
+            if (cursor.moveToFirst()){
+                while(!cursor.isAfterLast()){
+                    String roomID = cursor.getString(cursor.getColumnIndex(ChoreContract.RoomsEntry._ID));
+                    String description = cursor.getString(cursor.getColumnIndex(ChoreContract.RoomsEntry.COLUMN_DESCRIPTION));
+                    int roomTemplateID = cursor.getInt(cursor.getColumnIndex(ChoreContract.RoomsEntry.COLUMN_TEMPLATE));
+                    Log.d("RCD","setting up the " + description + " room, " + roomID);
+                    addUserChoresToDatabaseFromTemplate(description, roomID, roomTemplateID);
+
+                    cursor.moveToNext();
+                }
+            }
+            cursor.close();
         }
+
+    }
+
+    private void addUserChoresToDatabaseFromTemplate(String description, String roomID, int templateID){
+        //get Chores from template
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String[] CHORES_PROJECTION = new String[] {
+                "_id",
+                ChoreContract.ChoresEntry.COLUMN_DESCRIPTION,
+                ChoreContract.ChoresEntry.COLUMN_FREQUENCY,
+                ChoreContract.ChoresEntry.COLUMN_EFFORT
+        };
+
+        String selectionString = ChoreContract.ChoresEntry.TABLE_NAME +
+                "." + ChoreContract.ChoresEntry.COLUMN_DESCRIPTION + " = ? AND " +
+                ChoreContract.ChoresEntry.TABLE_NAME + "." + ChoreContract.ChoresEntry.COLUMN_TYPE +
+                " = ?";
+        Cursor cursor = db.query(ChoreContract.ChoresEntry.TABLE_NAME,
+                CHORES_PROJECTION,
+                selectionString,
+                new String[]{description, ChoreContract.ChoresEntry.TYPE_TEMPLATE},
+                null,
+                null,
+                null);
+
+        db.beginTransaction();
+        try {
+            if (cursor.moveToFirst()) {
+                ContentValues cv = new ContentValues(5);
+                cv.put(ChoreContract.ChoresEntry.COLUMN_DESCRIPTION, cursor.getString(cursor.getColumnIndex(ChoreContract.ChoresEntry.COLUMN_DESCRIPTION)));
+                cv.put(ChoreContract.ChoresEntry.COLUMN_FREQUENCY, cursor.getString(cursor.getColumnIndex(ChoreContract.ChoresEntry.COLUMN_FREQUENCY)));
+                cv.put(ChoreContract.ChoresEntry.COLUMN_EFFORT, cursor.getString(cursor.getColumnIndex(ChoreContract.ChoresEntry.COLUMN_FREQUENCY)));
+                cv.put(ChoreContract.ChoresEntry.COLUMN_ROOM_ID, roomID);
+                cv.put(ChoreContract.ChoresEntry.COLUMN_TYPE, ChoreContract.ChoresEntry.TYPE_USER);
+                db.insert(ChoreContract.ChoresEntry.TABLE_NAME, null, cv);
+
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+
+
+
     }
 
     private void runTestQuery() {
         ChoreDBHelper helper = new ChoreDBHelper(this);
         SQLiteDatabase db = helper.getReadableDatabase();
 
-        Cursor cursor = db.query(ChoreContract.ChoresEntry.TABLE_NAME, new String[] {"_id", ChoreDBHelper.CHORES_TEMPLATE_COLUMN_DESCRIPTION, ChoreDBHelper.CHORES_TEMPLATE_COLUMN_FREQUENCY,
-                        ChoreDBHelper.CHORES_TEMPLATE_COLUMN_EFFORT,ChoreDBHelper.CHORES_TEMPLATE_COLUMN_ROOM},
+        String[] CHORE_PROJECTION = new String[] {
+                "_id",
+                ChoreContract.ChoresEntry.COLUMN_DESCRIPTION,
+                ChoreContract.ChoresEntry.COLUMN_FREQUENCY,
+                ChoreContract.ChoresEntry.COLUMN_EFFORT,
+                ChoreContract.ChoresEntry.COLUMN_ROOM_ID,
+                ChoreContract.ChoresEntry.COLUMN_LAST_DONE,
+                ChoreContract.ChoresEntry.COLUMN_NEXT_DUE
+        };
+
+        String floor = "bedroom";
+
+        //Uri testUri = ChoreContract.ChoresEntry.buildFloorUri(floor);
+        //Uri weatherUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationQuery, System.currentTimeMillis());
+
+        //Cursor cursor = getContentResolver().query(testUri,)
+
+        Cursor cursor = db.query(ChoreContract.ChoresEntry.TABLE_NAME, CHORE_PROJECTION,
                  null, null, null, null, null);
 
         if (cursor.moveToFirst()){
             while(!cursor.isAfterLast()){
-                String data = cursor.getString(cursor.getColumnIndex("description"));
-                Log.d("RCD",data);
+                String description = cursor.getString(cursor.getColumnIndex("description"));
+                String room = cursor.getString(cursor.getColumnIndex("room"));
+                String frequency = cursor.getString(cursor.getColumnIndex("frequency"));
+                Log.d("RCD",description+ " in the " + room + " every " + frequency);
                 cursor.moveToNext();
             }
         }
@@ -326,8 +415,6 @@ public class SetupActivity extends BaseActivity {
     private void setupChoreTemplateDBFromCSV(){
 
         ChoreDBHelper helper = new ChoreDBHelper(this);
-
-
 
         SQLiteDatabase db = helper.getWritableDatabase();
 
@@ -345,10 +432,11 @@ public class SetupActivity extends BaseActivity {
                     continue;
                 }
                 ContentValues cv = new ContentValues(5);
-                cv.put(ChoreDBHelper.CHORES_TEMPLATE_COLUMN_DESCRIPTION, columns[0].trim());
-                cv.put(ChoreDBHelper.CHORES_TEMPLATE_COLUMN_FREQUENCY, columns[1].trim());
-                cv.put(ChoreDBHelper.CHORES_TEMPLATE_COLUMN_EFFORT, columns[2].trim());
-                cv.put(ChoreDBHelper.CHORES_TEMPLATE_COLUMN_ROOM, columns[3].trim());
+                cv.put(ChoreContract.ChoresEntry.COLUMN_DESCRIPTION, columns[0].trim());
+                cv.put(ChoreContract.ChoresEntry.COLUMN_FREQUENCY, columns[1].trim());
+                cv.put(ChoreContract.ChoresEntry.COLUMN_EFFORT, columns[2].trim());
+                cv.put(ChoreContract.ChoresEntry.COLUMN_ROOM_ID, columns[3].trim());
+                cv.put(ChoreContract.ChoresEntry.COLUMN_TYPE, ChoreContract.ChoresEntry.TYPE_TEMPLATE);
                 db.insert(ChoreContract.ChoresEntry.TABLE_NAME, null, cv);
             }
         } catch (IOException e) {

@@ -19,13 +19,6 @@ public class ChoreDBHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     public static final String CHORES_DATABASE_NAME = "chores.db";
-    public static final String CHORES_TEMPLATE_DATABASE_NAME = "chore_templates.db";
-
-    public static final String CHORES_TEMPLATE_COLUMN_DESCRIPTION = "description";
-    public static final String CHORES_TEMPLATE_COLUMN_FREQUENCY = "frequency";
-    public static final String CHORES_TEMPLATE_COLUMN_EFFORT = "effort";
-    public static final String CHORES_TEMPLATE_COLUMN_ROOM = "room";
-
 
     public ChoreDBHelper(Context context) {
         super(context, CHORES_DATABASE_NAME, null, DATABASE_VERSION);
@@ -33,29 +26,34 @@ public class ChoreDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        // Create a table to hold floors data.  A location consists of the string supplied in the
-        // location setting, the city name, and the latitude and longitude
+        // Create a table to hold floors data
         final String SQL_CREATE_FLOORS_TABLE = "CREATE TABLE " + FloorsEntry.TABLE_NAME + " (" +
                 FloorsEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 FloorsEntry.INDEX + " INTEGER NOT NULL, " +
                 FloorsEntry.DESCRIPTION + " TEXT NOT NULL" +
                 " );";
 
+        // Create a table to hold rooms data
         final String SQL_CREATE_ROOMS_TABLE = "CREATE TABLE " + RoomsEntry.TABLE_NAME + " (" +
                 RoomsEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                RoomsEntry.DESCRIPTION + " TEXT NOT NULL, " +
-                RoomsEntry.FLOOR_INDEX + " INTEGER NOT NULL, " +
-                RoomsEntry.TEMPLATE + " INTEGER NOT NULL" +
+                RoomsEntry.COLUMN_DESCRIPTION + " TEXT NOT NULL, " +
+                RoomsEntry.COLUMN_FLOOR_INDEX + " INTEGER NOT NULL, " +
+                RoomsEntry.COLUMN_TEMPLATE + " INTEGER NOT NULL" +
                 " );";
 
+        // Create a table to hold user chores data
         final String SQL_CREATE_CHORES_TABLE = "CREATE TABLE " + ChoresEntry.TABLE_NAME + " (" +
                 ChoresEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                ChoresEntry.DESCRIPTION + " TEXT NOT NULL," +
-                ChoresEntry.FREQUENCY + " TEXT NOT NULL," +
-                ChoresEntry.EFFORT + " TEXT NOT NULL," +
-                ChoresEntry.ROOM + " TEXT NOT NULL"+
+                ChoresEntry.COLUMN_DESCRIPTION + " TEXT NOT NULL," +
+                ChoresEntry.COLUMN_FREQUENCY + " TEXT NOT NULL," +
+                ChoresEntry.COLUMN_EFFORT + " TEXT NOT NULL," +
+                ChoresEntry.COLUMN_ROOM_ID + " INTEGER,"+
+                ChoresEntry.COLUMN_LAST_DONE + " INTEGER ,"+
+                ChoresEntry.COLUMN_NEXT_DUE + " INTEGER,"+
+                ChoresEntry.COLUMN_TYPE + " TEXT NOT NULL"+
                 " );";
 
+        // Create a table to hold event data
         final String SQL_CREATE_EVENTS_TABLE = "CREATE TABLE " + EventsEntry.TABLE_NAME + " (" +
                 EventsEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 EventsEntry.COLUMN_TIMESTAMP + " INTEGER UNIQUE NOT NULL" +
@@ -66,7 +64,7 @@ public class ChoreDBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_CREATE_CHORES_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_EVENTS_TABLE);
     }
-    
+
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is
