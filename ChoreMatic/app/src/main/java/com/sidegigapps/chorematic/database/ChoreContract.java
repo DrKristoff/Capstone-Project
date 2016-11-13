@@ -87,7 +87,6 @@ public class ChoreContract {
         // Table name
         public static final String TABLE_NAME = "rooms";
         public static final String COLUMN_DESCRIPTION = "description";
-        public static final String COLUMN_TEMPLATE = "template";
         public static final String COLUMN_FLOOR_INDEX = "floor_index";
 
         public static Uri buildRoomsUri(long id) {
@@ -116,7 +115,7 @@ public class ChoreContract {
         public static final String COLUMN_DESCRIPTION = "description";
         public static final String COLUMN_FREQUENCY = "frequency";
         public static final String COLUMN_EFFORT = "effort";
-        public static final String COLUMN_ROOM_ID = "room";
+        public static final String COLUMN_ROOM = "room";  //for template rooms, room = bedroom, for example.  For user chores, room is the integer room id
         public static final String COLUMN_TYPE = "type";
         public static final String COLUMN_LAST_DONE = "last";
         public static final String COLUMN_NEXT_DUE = "due";

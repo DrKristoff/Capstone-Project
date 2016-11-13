@@ -37,8 +37,7 @@ public class ChoreDBHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_ROOMS_TABLE = "CREATE TABLE " + RoomsEntry.TABLE_NAME + " (" +
                 RoomsEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 RoomsEntry.COLUMN_DESCRIPTION + " TEXT NOT NULL, " +
-                RoomsEntry.COLUMN_FLOOR_INDEX + " INTEGER NOT NULL, " +
-                RoomsEntry.COLUMN_TEMPLATE + " INTEGER NOT NULL" +
+                RoomsEntry.COLUMN_FLOOR_INDEX + " INTEGER NOT NULL" +
                 " );";
 
         // Create a table to hold user chores data
@@ -47,7 +46,7 @@ public class ChoreDBHelper extends SQLiteOpenHelper {
                 ChoresEntry.COLUMN_DESCRIPTION + " TEXT NOT NULL," +
                 ChoresEntry.COLUMN_FREQUENCY + " TEXT NOT NULL," +
                 ChoresEntry.COLUMN_EFFORT + " TEXT NOT NULL," +
-                ChoresEntry.COLUMN_ROOM_ID + " INTEGER,"+
+                ChoresEntry.COLUMN_ROOM + " TEXT NOT NULL,"+
                 ChoresEntry.COLUMN_LAST_DONE + " INTEGER ,"+
                 ChoresEntry.COLUMN_NEXT_DUE + " INTEGER,"+
                 ChoresEntry.COLUMN_TYPE + " TEXT NOT NULL"+

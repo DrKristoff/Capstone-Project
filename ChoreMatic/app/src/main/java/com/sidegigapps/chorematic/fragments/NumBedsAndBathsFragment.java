@@ -21,7 +21,7 @@ public class NumBedsAndBathsFragment extends BaseSetupFragment implements View.O
     boolean hasBedrooms = false;
     boolean hasBathrooms = false;
 
-    int numBaths = 1;
+    int numBaths =1;
     int numBeds = 1;
 
     View rootView;
@@ -41,7 +41,7 @@ public class NumBedsAndBathsFragment extends BaseSetupFragment implements View.O
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            floorIndex = bundle.getInt("index", 1);
+            floorIndex = bundle.getInt("index", 99);
             description = bundle.getString("description");
             hasBedrooms = bundle.getBoolean("hasBedrooms");
             hasBathrooms = bundle.getBoolean("hasBathrooms");
@@ -68,6 +68,7 @@ public class NumBedsAndBathsFragment extends BaseSetupFragment implements View.O
             rootView.findViewById(R.id.imageViewThreeBedrooms).setOnClickListener(this);
         } else {
             rootView.findViewById(R.id.numBedroomsCardView).setVisibility(View.GONE);
+            numBeds =0;
         }
 
         if (hasBathrooms){
@@ -76,6 +77,7 @@ public class NumBedsAndBathsFragment extends BaseSetupFragment implements View.O
             rootView.findViewById(R.id.imageViewThreeBathrooms).setOnClickListener(this);
         } else {
             rootView.findViewById(R.id.numBathroomsCardView).setVisibility(View.GONE);
+            numBaths = 0;
         }
 
         return rootView;
@@ -115,8 +117,7 @@ public class NumBedsAndBathsFragment extends BaseSetupFragment implements View.O
             case(R.id.remove_button):
                 break;
             case(R.id.next_button):
-                setupActivity.updateNumBedsAndBaths(floorIndex,getResources().getString(R.string.bathroom_string),numBaths);
-                setupActivity.updateNumBedsAndBaths(floorIndex,getResources().getString(R.string.bedroom_string),numBeds);
+                setupActivity.updateNumBedsAndBaths(floorIndex,numBaths, numBeds);
                 setupActivity.nextPage();
                 break;
             case(R.id.back_button):
