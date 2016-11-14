@@ -90,4 +90,8 @@
     <string name="bathroom_string">Bathroom</string>
     <string name="family_room_string">Family Room</string>
     <string name="dining_room_string">Dining Room</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
