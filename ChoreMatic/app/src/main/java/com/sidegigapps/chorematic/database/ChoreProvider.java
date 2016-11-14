@@ -86,7 +86,8 @@ public class ChoreProvider extends ContentProvider {
         return retCursor;
     }
 
-    private Cursor getRoomByID(Uri uri, String[] projection, String id){
+    private Cursor getRoomByID(Uri uri, String[] projection, String selection){
+        String _id = uri.getPathSegments().get(1);
         String selectionString = ChoreContract.RoomsEntry.TABLE_NAME +
                 "." + ChoreContract.RoomsEntry._ID + "= ?";
 
@@ -98,14 +99,15 @@ public class ChoreProvider extends ContentProvider {
         return builder.query(mHelper.getReadableDatabase(),
                 projection,
                 selectionString,
-                new String[]{id},
+                new String[]{_id},
                 null,
                 null,
                 null
         );
     }
 
-    private Cursor getFloorByID(Uri uri, String[] projection, String id){
+    private Cursor getFloorByID(Uri uri, String[] projection, String selection){
+        String _id = uri.getPathSegments().get(1);
         String selectionString = ChoreContract.FloorsEntry.TABLE_NAME +
                 "." + ChoreContract.FloorsEntry._ID + "= ?";
 
@@ -117,7 +119,7 @@ public class ChoreProvider extends ContentProvider {
         return builder.query(mHelper.getReadableDatabase(),
                 projection,
                 selectionString,
-                new String[]{id},
+                new String[]{_id},
                 null,
                 null,
                 null

@@ -23,12 +23,6 @@ import com.sidegigapps.chorematic.R;
 import com.sidegigapps.chorematic.database.ChoreContract;
 import com.sidegigapps.chorematic.database.ChoreContract.ChoresEntry;
 
-/**
- * A fragment representing a single Chore detail screen.
- * This fragment is either contained in a {@link ChoreListActivity}
- * in two-pane mode (on tablets) or a {@link ChoreDetailActivity}
- * on handsets.
- */
 public class ChoreDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
     public static final String ARG_ITEM_ID = "item_id";
@@ -74,6 +68,8 @@ public class ChoreDetailFragment extends Fragment implements LoaderManager.Loade
     TextView mLastTimestampTextView;
     TextView mNextTimestampTextView;
 
+    CollapsingToolbarLayout appBarLayout;
+
     public ChoreDetailFragment() {
     }
 
@@ -81,13 +77,7 @@ public class ChoreDetailFragment extends Fragment implements LoaderManager.Loade
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle("TITLE HERE");
-            }
-        }
+        appBarLayout = (CollapsingToolbarLayout) getActivity().findViewById(R.id.toolbar_layout);
     }
 
     @Override
@@ -100,7 +90,6 @@ public class ChoreDetailFragment extends Fragment implements LoaderManager.Loade
             mUri = arguments.getParcelable(ChoreDetailFragment.DETAIL_URI);
         }
 
-        mDescription = (TextView) rootView.findViewById(R.id.textViewDescription);
         mFloorNameTextView= (TextView) rootView.findViewById(R.id.floorNameTextView);
         mRoomNameTextView = (TextView) rootView.findViewById(R.id.roomNameTextView);
         mEffortImageView = (ImageView) rootView.findViewById(R.id.effortLevelImageView);
@@ -114,8 +103,6 @@ public class ChoreDetailFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         getLoaderManager().initLoader(DETAIL_LOADER, null, this);
-        getLoaderManager().initLoader(ROOM_LOADER, null, this);
-        getLoaderManager().initLoader(FLOOR_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -133,9 +120,29 @@ public class ChoreDetailFragment extends Fragment implements LoaderManager.Loade
                 );
             }
         } else if(id==ROOM_LOADER){
-
+            Uri roomUri = ChoreContract.RoomsEntry.CONTENT_URI.buildUpon()
+                    .appendPath(String.valueOf(roomID))
+                    .build();
+            return new CursorLoader(
+                    getActivity(),
+                    roomUri,
+                    new String[]{ChoreContract.RoomsEntry.COLUMN_DESCRIPTION},
+                    null,
+                    null,
+                    null
+            );
         } else if(id==FLOOR_LOADER){
-
+            Uri floorUri = ChoreContract.RoomsEntry.CONTENT_URI.buildUpon()
+                    .appendPath(String.valueOf(floorID))
+                    .build();
+            return new CursorLoader(
+                    getActivity(),
+                    floorUri,
+                    new String[]{ChoreContract.FloorsEntry.DESCRIPTION},
+                    null,
+                    null,
+                    null
+            );
         }
 
         return null;
@@ -145,37 +152,47 @@ public class ChoreDetailFragment extends Fragment implements LoaderManager.Loade
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         int id = loader.getId();
 
-        if(id==ROOM_LOADER){
-
-        } else if(id==DETAIL_LOADER){
-
-        } else if(id==FLOOR_LOADER){
-
-        }
-
         if (data != null && data.moveToFirst()) {
 
-            String choreDescription = data.getString(COL_CHORE_DESCRIPTION);
-            mDescription.setText(choreDescription);
+            if (id == DETAIL_LOADER) {
+                String choreDescription = data.getString(COL_CHORE_DESCRIPTION).toUpperCase();
+                //mDescription.setText(choreDescription);
+                appBarLayout.setTitle(choreDescription);
 
-            String floorName = data.getString(COL_CHORE_FLOOR);
-            mFloorNameTextView.setText(floorName);
+                floorID = data.getInt(COL_CHORE_FLOOR);
+                roomID = data.getInt(COL_CHORE_ROOM);
 
-            String roomName = data.getString(COL_CHORE_ROOM);
-            mRoomNameTextView.setText(roomName);
+                /*String floorName = data.getString(COL_CHORE_FLOOR);
+                mFloorNameTextView.setText(floorName);
 
-            int effortResource = Utils.getImageResourceFromText(data.getString(COL_CHORE_EFFORT));
-            mEffortImageView.setImageResource(effortResource);
-            mEffortImageView.setContentDescription(data.getString(COL_CHORE_EFFORT));
+                String roomName = data.getString(COL_CHORE_ROOM);
+                mRoomNameTextView.setText(roomName);*/
 
-            String frequency = data.getString(COL_CHORE_FREQUENCY);
-            mFrequencyTextView.setText(frequency);
+                int effortResource = Utils.getImageResourceFromText(data.getString(COL_CHORE_EFFORT));
+                mEffortImageView.setImageResource(effortResource);
+                mEffortImageView.setContentDescription(data.getString(COL_CHORE_EFFORT));
 
-            String lastTimestamp = data.getString(COL_CHORE_LAST);
-            mLastTimestampTextView.setText(lastTimestamp);
+                String frequency = data.getString(COL_CHORE_FREQUENCY);
+                mFrequencyTextView.setText(frequency);
 
-            String nextTimestamp = data.getString(COL_CHORE_NEXT);
-            mNextTimestampTextView.setText(nextTimestamp);
+                String lastTimestamp = data.getString(COL_CHORE_LAST);
+                mLastTimestampTextView.setText(lastTimestamp);
+
+                String nextTimestamp = data.getString(COL_CHORE_NEXT);
+                mNextTimestampTextView.setText(nextTimestamp);
+
+                getLoaderManager().initLoader(ROOM_LOADER, null, this);
+                getLoaderManager().initLoader(FLOOR_LOADER, null, this);
+
+            } else if (id == ROOM_LOADER) {
+                String roomDescription = data.getString(data.getColumnIndex(ChoreContract.RoomsEntry.COLUMN_DESCRIPTION));
+                mRoomNameTextView.setText(roomDescription);
+            } else if (id == FLOOR_LOADER) {
+                String floorDescription = data.getString(data.getColumnIndex(ChoreContract.FloorsEntry.DESCRIPTION));
+                mFloorNameTextView.setText(floorDescription);
+            }
+        } else {
+            //display loading error
         }
     }
 
