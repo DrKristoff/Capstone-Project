@@ -1,10 +1,16 @@
 package com.sidegigapps.chorematic.activities;
 
-import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteQueryBuilder;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.v4.app.LoaderManager;
+
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
@@ -12,30 +18,37 @@ import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
+import android.widget.ListView;
 
 import com.sidegigapps.chorematic.R;
-import com.sidegigapps.chorematic.dummy.DummyContent;
+import com.sidegigapps.chorematic.adapters.ChoreListAdapter;
+import com.sidegigapps.chorematic.database.ChoreContract;
+import com.sidegigapps.chorematic.database.ChoreContract.ChoresEntry;
 import com.sidegigapps.chorematic.fragments.ChoreDetailFragment;
+import com.sidegigapps.chorematic.models.Chore;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * An activity representing a list of Chores. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link ChoreDetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- */
-public class ChoreListActivity extends AppCompatActivity {
+public class ChoreListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
     private boolean mTwoPane;
+    private ListView mListView;
+    private ChoreListAdapter mChoreListAdapter;
+    private ArrayList<Chore> mChoreList;
+
+    private static final String CHOREDETAILFRAGMENT_TAG = "CDFTAG";
+
+    private static final String[] Chores_Projection = {
+            ChoresEntry._ID,
+            ChoresEntry.COLUMN_DESCRIPTION,
+            ChoresEntry.COLUMN_FREQUENCY,
+            ChoresEntry.COLUMN_EFFORT,
+            ChoresEntry.COLUMN_ROOM,
+            ChoresEntry.COLUMN_FLOOR_ID,
+            ChoresEntry.COLUMN_LAST_DONE,
+            ChoresEntry.COLUMN_NEXT_DUE,
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +68,11 @@ public class ChoreListActivity extends AppCompatActivity {
             }
         });
 
-        View recyclerView = findViewById(R.id.chore_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        mListView = (ListView) findViewById(R.id.chore_list);
+
+        mChoreList = new ArrayList<>();
+        mChoreListAdapter = new ChoreListAdapter(this,null,0);
+        mListView.setAdapter(mChoreListAdapter);
 
         if (findViewById(R.id.chore_detail_container) != null) {
             // The detail container view will be present only in the
@@ -66,79 +81,69 @@ public class ChoreListActivity extends AppCompatActivity {
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
+
+        getSupportLoaderManager().initLoader(0,null,this);
+
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Uri mUri = ChoreContract.ChoresEntry.CONTENT_URI;
+        if ( null != mUri ) {
+            return new CursorLoader(
+                    this,
+                    mUri,
+                    Chores_Projection,
+                    null,
+                    null,
+                    null
+            );
+        }
+        return null;
     }
 
-    public class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
-
-        private final List<DummyContent.DummyItem> mValues;
-
-        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
-            mValues = items;
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if (data != null && data.moveToFirst()) {
+            mChoreListAdapter.swapCursor(data);
         }
 
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.chore_list_content, parent, false);
-            return new ViewHolder(view);
-        }
+    }
 
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            //holder.mContentView.setText(mValues.get(position).content);
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
 
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mTwoPane) {
-                        Bundle arguments = new Bundle();
-                        arguments.putString(ChoreDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-                        ChoreDetailFragment fragment = new ChoreDetailFragment();
-                        fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.chore_detail_container, fragment)
-                                .commit();
-                    } else {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, ChoreDetailActivity.class);
-                        intent.putExtra(ChoreDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+    }
 
-                        context.startActivity(intent);
-                    }
-                }
-            });
-        }
 
-        @Override
-        public int getItemCount() {
-            return mValues.size();
-        }
+    public void onChoreSelected(int choreID){
+        onChoreSelected(ChoreContract.ChoresEntry.CONTENT_URI.buildUpon()
+                .appendPath("id")
+                .appendPath(String.valueOf(choreID)).build()
+        );
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView mIdView;
-            //public final TextView mContentView;
-            public DummyContent.DummyItem mItem;
+    }
 
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
-                mIdView = (TextView) view.findViewById(R.id.id);
-                //mContentView = (TextView) view.findViewById(R.id.content);
-            }
+    public void onChoreSelected(Uri contentUri) {
+        if (mTwoPane) {
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            Bundle args = new Bundle();
+            args.putParcelable(ChoreDetailFragment.DETAIL_URI, contentUri);
 
-            @Override
-            public String toString() {
-                //return super.toString() + " '" + mContentView.getText() + "'";
-                return super.toString() + " '";
-            }
+            ChoreDetailFragment fragment = new ChoreDetailFragment();
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.chore_detail_container, fragment, CHOREDETAILFRAGMENT_TAG)
+                    .commit();
+        } else {
+            Intent intent = new Intent(this, ChoreDetailActivity.class)
+                    .setData(contentUri);
+            startActivity(intent);
         }
     }
 }

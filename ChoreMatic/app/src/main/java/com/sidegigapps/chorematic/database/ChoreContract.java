@@ -102,7 +102,7 @@ public class ChoreContract {
     public static final class ChoresEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath(PATH_FLOORS).build();
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_CHORES).build();
 
         public static final String CONTENT_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CHORES;
@@ -117,6 +117,7 @@ public class ChoreContract {
         public static final String COLUMN_EFFORT = "effort";
         public static final String COLUMN_ROOM = "room";  //for template rooms, room = bedroom, for example.  For user chores, room is the integer room id
         public static final String COLUMN_TYPE = "type";
+        public static final String COLUMN_FLOOR_ID = "floor_id";
         public static final String COLUMN_LAST_DONE = "last";
         public static final String COLUMN_NEXT_DUE = "due";
 
@@ -142,10 +143,10 @@ public class ChoreContract {
                     .appendQueryParameter(COLUMN_DATE, Long.toString(normalizedDate)).build();
         }*/
 
-        public static Uri buildWeatherLocationWithDate(String locationSetting, long date) {
+/*        public static Uri buildWeatherLocationWithDate(String locationSetting, long date) {
             return CONTENT_URI.buildUpon().appendPath(locationSetting)
                     .appendPath(Long.toString(Utils.normalizeDate(date))).build();
-        }
+        }*/
 
         public static String getLocationSettingFromUri(Uri uri) {
             return uri.getPathSegments().get(1);

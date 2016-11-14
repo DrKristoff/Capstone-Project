@@ -47,6 +47,7 @@ public class ChoreDBHelper extends SQLiteOpenHelper {
                 ChoresEntry.COLUMN_FREQUENCY + " TEXT NOT NULL," +
                 ChoresEntry.COLUMN_EFFORT + " TEXT NOT NULL," +
                 ChoresEntry.COLUMN_ROOM + " TEXT NOT NULL,"+
+                ChoresEntry.COLUMN_FLOOR_ID + " INTEGER,"+
                 ChoresEntry.COLUMN_LAST_DONE + " INTEGER ,"+
                 ChoresEntry.COLUMN_NEXT_DUE + " INTEGER,"+
                 ChoresEntry.COLUMN_TYPE + " TEXT NOT NULL"+

@@ -16,7 +16,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textViewDescription"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/colorAccent"
@@ -40,10 +40,12 @@
 
                 <TextView
                     style="@style/ChoreDetailData"
+                    android:id="@+id/floorNameTextView"
                     android:text="Floor Name" />
 
                 <TextView
                     style="@style/ChoreDetailData"
+                    android:id="@+id/roomNameTextView"
                     android:text="Room Name" />
             </TableRow>
 
@@ -67,10 +69,12 @@
 
                 <ImageView
                     style="@style/ChoreDetailData"
+                    android:id="@+id/effortLevelImageView"
                     android:src="@drawable/ic_high" />
 
                 <TextView
                     style="@style/ChoreDetailData"
+                    android:id="@+id/frequencyTextView"
                     android:text="Frequency Data" />
 
             </TableRow>
@@ -95,10 +99,12 @@
 
                 <TextView
                     style="@style/ChoreDetailData"
+                    android:id="@+id/lastTimestampTextView"
                     android:text="Last Timestamp" />
 
                 <TextView
                     style="@style/ChoreDetailData"
+                    android:id="@+id/nextTimestampTextView"
                     android:text="Next Timestamp" />
 
             </TableRow>
@@ -132,8 +138,17 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    style="@style/ChoreDetailNotes"
+                    style="@style/ChoreDetailNotesLabel"
                     android:text="NOTES:" />
+
+            </TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/ChoreDetailNotesData"
+                    android:id="@+id/notesTextView"/>
 
             </TableRow>
         </TableLayout>

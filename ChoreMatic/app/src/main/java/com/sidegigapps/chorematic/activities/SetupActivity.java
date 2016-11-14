@@ -370,6 +370,13 @@ public class SetupActivity extends BaseActivity {
                 cv.put(ChoreContract.ChoresEntry.COLUMN_TYPE, ChoreContract.ChoresEntry.TYPE_USER);
                 db.insert(ChoreContract.ChoresEntry.TABLE_NAME, null, cv);
 
+                Log.d("RCD","ADDED REAL CHORE: " +
+                        cursor.getString(cursor.getColumnIndex(ChoreContract.ChoresEntry.COLUMN_DESCRIPTION))+","+
+                        cursor.getString(cursor.getColumnIndex(ChoreContract.ChoresEntry.COLUMN_FREQUENCY))+","+
+                        cursor.getString(cursor.getColumnIndex(ChoreContract.ChoresEntry.COLUMN_EFFORT))+","+
+                        ChoreContract.ChoresEntry.TYPE_USER);
+
+
             }
             cursor.close();
         } catch (Exception e) {

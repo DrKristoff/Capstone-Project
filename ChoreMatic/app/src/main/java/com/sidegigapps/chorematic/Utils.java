@@ -71,4 +71,17 @@ public class Utils {
 
         return color;
     }
+
+    public static int getImageResourceFromText(String string) {
+        switch(string){
+            case "low":
+                return R.drawable.ic_low;
+            case "medium":
+                return R.drawable.ic_medium;
+            case "high":
+                return R.drawable.ic_high;
+            default:
+                return R.drawable.ic_high;
+        }
+    }
 }

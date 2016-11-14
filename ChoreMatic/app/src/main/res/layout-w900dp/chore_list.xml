@@ -27,7 +27,7 @@
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
         tools:context="com.sidegigapps.chorematic.activities.ChoreListActivity"
-        tools:listitem="@layout/chore_list_content" />
+        tools:listitem="@layout/chore_list_item" />
 
     <FrameLayout
         android:id="@+id/chore_detail_container"

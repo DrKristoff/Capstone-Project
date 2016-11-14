@@ -22,6 +22,7 @@ public class ChoreProvider extends ContentProvider {
     static final int CHORE_TEMPLATE_BY_ROOM = 101;
     static final int CHORES_BY_FREQUENCY = 102;
     static final int CHORES_BY_DUE_DATE = 103;
+    static final int CHORES_BY_ID = 104;
     static final int ROOMS = 200;
     static final int FLOORS = 300;
     static final int EVENTS = 400;
@@ -61,6 +62,21 @@ public class ChoreProvider extends ContentProvider {
                 retCursor = getUserChoresByDueDate(uri, projection, selection);
                 break;
             }
+            case CHORES_BY_ID:
+            {
+                retCursor = getUserChoresByID(uri, projection, selection);
+                break;
+            }
+            case ROOMS:
+            {
+                retCursor = getRoomByID(uri, projection, selection);
+                break;
+            }
+            case FLOORS:
+            {
+                retCursor = getFloorByID(uri, projection, selection);
+                break;
+            }
 
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -68,6 +84,44 @@ public class ChoreProvider extends ContentProvider {
         //retCursor.setNotificationUri(getContext().getContentResolver(), uri);
         //return null;
         return retCursor;
+    }
+
+    private Cursor getRoomByID(Uri uri, String[] projection, String id){
+        String selectionString = ChoreContract.RoomsEntry.TABLE_NAME +
+                "." + ChoreContract.RoomsEntry._ID + "= ?";
+
+        Log.d("RCD",selectionString);
+
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(ChoreContract.RoomsEntry.TABLE_NAME);
+
+        return builder.query(mHelper.getReadableDatabase(),
+                projection,
+                selectionString,
+                new String[]{id},
+                null,
+                null,
+                null
+        );
+    }
+
+    private Cursor getFloorByID(Uri uri, String[] projection, String id){
+        String selectionString = ChoreContract.FloorsEntry.TABLE_NAME +
+                "." + ChoreContract.FloorsEntry._ID + "= ?";
+
+        Log.d("RCD",selectionString);
+
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(ChoreContract.FloorsEntry.TABLE_NAME);
+
+        return builder.query(mHelper.getReadableDatabase(),
+                projection,
+                selectionString,
+                new String[]{id},
+                null,
+                null,
+                null
+        );
     }
 
     private Cursor getTemplateChoresByRoomType(Uri uri, String[] projection, String room){
@@ -79,6 +133,7 @@ public class ChoreProvider extends ContentProvider {
         Log.d("RCD",selectionString);
 
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(ChoreContract.ChoresEntry.TABLE_NAME);
 
         return builder.query(mHelper.getReadableDatabase(),
                 projection,
@@ -96,6 +151,7 @@ public class ChoreProvider extends ContentProvider {
         Log.d("RCD",selectionString);
 
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(ChoreContract.ChoresEntry.TABLE_NAME);
 
         return builder.query(mHelper.getReadableDatabase(),
                 projection,
@@ -114,6 +170,7 @@ public class ChoreProvider extends ContentProvider {
         Log.d("RCD",selectionString);
 
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(ChoreContract.ChoresEntry.TABLE_NAME);
 
         return builder.query(mHelper.getReadableDatabase(),
                 projection,
@@ -133,11 +190,33 @@ public class ChoreProvider extends ContentProvider {
         long date = ChoreContract.ChoresEntry.getDateFromUri(uri);
 
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(ChoreContract.ChoresEntry.TABLE_NAME);
 
         return builder.query(mHelper.getReadableDatabase(),
                 projection,
                 selectionString,
                 new String[]{Long.toString(date)},
+                null,
+                null,
+                null
+        );
+    }
+
+    private Cursor getUserChoresByID(Uri uri, String[] projection, String frequency){
+        String _id = uri.getPathSegments().get(2);
+        String selectionString = ChoreContract.ChoresEntry.TABLE_NAME +
+                "." + ChoreContract.ChoresEntry._ID + "=?";
+        Log.d("RCD",selectionString);
+
+        long date = ChoreContract.ChoresEntry.getDateFromUri(uri);
+
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(ChoreContract.ChoresEntry.TABLE_NAME);
+
+        return builder.query(mHelper.getReadableDatabase(),
+                projection,
+                selectionString,
+                new String[]{_id},
                 null,
                 null,
                 null
@@ -150,11 +229,12 @@ public class ChoreProvider extends ContentProvider {
 
         // For each type of URI you want to add, create a corresponding code.
         matcher.addURI(authority, ChoreContract.PATH_CHORES, CHORES);
-        matcher.addURI(authority, ChoreContract.PATH_FLOORS, FLOORS);
-        matcher.addURI(authority, ChoreContract.PATH_ROOMS, ROOMS);
-        matcher.addURI(authority, ChoreContract.PATH_CHORES, CHORE_TEMPLATE_BY_ROOM);
-        matcher.addURI(authority, ChoreContract.PATH_CHORES + "/*", CHORES_BY_FREQUENCY);
-        matcher.addURI(authority, ChoreContract.PATH_CHORES + "/#", CHORES_BY_DUE_DATE);
+        matcher.addURI(authority, ChoreContract.PATH_FLOORS + "/#", FLOORS);
+        matcher.addURI(authority, ChoreContract.PATH_ROOMS + "/#", ROOMS);
+        matcher.addURI(authority, ChoreContract.PATH_CHORES + "/rooms/*", CHORE_TEMPLATE_BY_ROOM);
+        matcher.addURI(authority, ChoreContract.PATH_CHORES + "/frequency/*", CHORES_BY_FREQUENCY);
+        matcher.addURI(authority, ChoreContract.PATH_CHORES + "/id/*", CHORES_BY_ID);
+        matcher.addURI(authority, ChoreContract.PATH_CHORES + "/date/*", CHORES_BY_DUE_DATE);
 
         return matcher;
     }

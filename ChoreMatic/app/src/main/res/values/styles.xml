@@ -22,6 +22,11 @@
         <item name="android:layout_margin">5dp</item>
     </style>
 
+    <style name="ChoreListDescription">
+        <item name="android:textSize">26sp</item>
+        <item name="android:layout_margin">5dp</item>
+    </style>
+
     <style name="ChoreDetailData">
         <item name="android:layout_width">0dp</item>
         <item name="android:textSize">25sp</item>
@@ -40,13 +45,21 @@
         <item name="android:layout_weight">1</item>
     </style>
 
-    <style name="ChoreDetailNotes">
+    <style name="ChoreDetailNotesLabel">
         <item name="android:layout_width">0dp</item>
         <item name="android:textSize">20sp</item>
         <item name="android:gravity">left</item>
         <item name="android:layout_margin">10dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="ChoreDetailNotesData">
+        <item name="android:textSize">20sp</item>
+        <item name="android:gravity">left</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
     </style>
 
     <!-- Activity with no Title -->
