@@ -31,12 +31,6 @@
             android:layout_height="wrap_content"
             android:text="CHORE DESCRIPTION" />
 
-        <ImageView
-            android:id="@+id/detailsImageView"
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_navigate_next_black_48dp" />
 
     </LinearLayout>
 

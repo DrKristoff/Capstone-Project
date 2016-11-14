@@ -25,13 +25,11 @@ public class ChoreListAdapter extends CursorAdapter {
 
         public static class ViewHolder {
             public final TextView descriptionTextView;
-            public final ImageView detailImageView;
             public final ImageView choreDoneImageView;
             public int choreID;
 
             public ViewHolder(View view) {
                 descriptionTextView = (TextView) view.findViewById(R.id.choreListItemDescriptionTextView);
-                detailImageView = (ImageView) view.findViewById(R.id.detailsImageView);
                 choreDoneImageView = (ImageView) view.findViewById(R.id.doneImageView);
             }
         }
@@ -64,7 +62,7 @@ public class ChoreListAdapter extends CursorAdapter {
             // Find TextView and set formatted date on it
             viewHolder.descriptionTextView.setText(description);
 
-            viewHolder.detailImageView.setOnClickListener(new View.OnClickListener() {
+            viewHolder.descriptionTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     ((ChoreListActivity)context).onChoreSelected(viewHolder.choreID);

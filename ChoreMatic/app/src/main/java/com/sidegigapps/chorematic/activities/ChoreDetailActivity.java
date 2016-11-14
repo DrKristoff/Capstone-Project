@@ -19,7 +19,7 @@ import com.sidegigapps.chorematic.fragments.ChoreDetailFragment;
  * item details are presented side-by-side with a list of items
  * in a {@link ChoreListActivity}.
  */
-public class ChoreDetailActivity extends AppCompatActivity {
+public class ChoreDetailActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -41,7 +41,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
-    String setupCompleted = "setupCompleted";
+    public static final String setupCompleted = "setupCompleted";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

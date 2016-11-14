@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
+import jonathanfinerty.once.Once;
+
 public class SetupActivity extends BaseActivity {
 
     private FrameLayout fragmentFrameLayout;
@@ -330,6 +332,7 @@ public class SetupActivity extends BaseActivity {
         }
 
         private void goToChoreList() {
+            Once.markDone(SignInActivity.setupCompleted);
             startActivity(new Intent(SetupActivity.this, ChoreListActivity.class));
 
         }
