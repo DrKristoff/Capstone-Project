@@ -2,14 +2,20 @@ package com.sidegigapps.chorematic.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Paint;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.CursorAdapter;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sidegigapps.chorematic.R;
+import com.sidegigapps.chorematic.activities.BaseActivity;
 import com.sidegigapps.chorematic.activities.ChoreListActivity;
 import com.sidegigapps.chorematic.database.ChoreContract;
 
@@ -24,11 +30,14 @@ public class ChoreListAdapter extends CursorAdapter {
         private static final int VIEW_TYPE_FUTURE_DAY = 1;
 
         public static class ViewHolder {
-            public final TextView descriptionTextView;
+            public final CheckedTextView descriptionTextView;
+            public final ImageView detailsImageView;
             public int choreID;
 
             public ViewHolder(View view) {
-                descriptionTextView = (TextView) view.findViewById(R.id.choreListItemDescriptionTextView);
+                descriptionTextView = (CheckedTextView) view.findViewById(R.id.choreListItemDescriptionTextView);
+                detailsImageView = (ImageView) view.findViewById(R.id.detailImageView);
+
             }
         }
 
@@ -55,15 +64,30 @@ public class ChoreListAdapter extends CursorAdapter {
 
             viewHolder.choreID = cursor.getInt(cursor.getColumnIndex(ChoreContract.ChoresEntry._ID));
 
+            viewHolder.detailsImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ((ChoreListActivity)context).onChoreSelected(viewHolder.choreID);
+                }
+            });
             // Read date from cursor
             String description = cursor.getString(cursor.getColumnIndex(ChoreContract.ChoresEntry.COLUMN_DESCRIPTION));
             // Find TextView and set formatted date on it
             viewHolder.descriptionTextView.setText(description);
-
             viewHolder.descriptionTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ((ChoreListActivity)context).onChoreSelected(viewHolder.choreID);
+                    if(viewHolder.descriptionTextView.isChecked()){
+                        ((ChoreListActivity)context).markChoreAsDone(viewHolder.choreID);
+                        viewHolder.descriptionTextView.setChecked(false);
+                        viewHolder.descriptionTextView.setPaintFlags(
+                                viewHolder.descriptionTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                    } else {
+                        ((ChoreListActivity)context).markChoreAsToDo(viewHolder.choreID);
+                        viewHolder.descriptionTextView.setChecked(true);
+                        viewHolder.descriptionTextView.setPaintFlags(
+                                viewHolder.descriptionTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    }
                 }
             });
 

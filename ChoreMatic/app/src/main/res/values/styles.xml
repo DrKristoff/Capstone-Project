@@ -23,7 +23,7 @@
     </style>
 
     <style name="ChoreListDescription">
-        <item name="android:textSize">26sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:layout_margin">5dp</item>
     </style>
 

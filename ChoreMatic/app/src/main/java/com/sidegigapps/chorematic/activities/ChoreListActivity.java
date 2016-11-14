@@ -10,6 +10,7 @@ import android.support.v4.app.LoaderManager;
 
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -19,8 +20,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -150,6 +154,13 @@ public class ChoreListActivity extends BaseActivity implements LoaderManager.Loa
                 .appendPath("id")
                 .appendPath(String.valueOf(choreID)).build()
         );
+    }
+
+    public void markChoreAsDone(int choreID){
+
+    }
+
+    public void markChoreAsToDo(int choreID){
 
     }
 
