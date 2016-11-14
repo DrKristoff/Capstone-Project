@@ -74,7 +74,7 @@ public class ChoreProvider extends ContentProvider {
             }
             case FLOORS:
             {
-                retCursor = getFloorByID(uri, projection, selection);
+                retCursor = getFloorByIndex(uri, projection, selection);
                 break;
             }
 
@@ -106,10 +106,10 @@ public class ChoreProvider extends ContentProvider {
         );
     }
 
-    private Cursor getFloorByID(Uri uri, String[] projection, String selection){
-        String _id = uri.getPathSegments().get(1);
+    private Cursor getFloorByIndex(Uri uri, String[] projection, String selection){
+        String index = uri.getPathSegments().get(1);
         String selectionString = ChoreContract.FloorsEntry.TABLE_NAME +
-                "." + ChoreContract.FloorsEntry._ID + "= ?";
+                "." + ChoreContract.FloorsEntry.INDEX + "= ?";
 
         Log.d("RCD",selectionString);
 
@@ -119,7 +119,7 @@ public class ChoreProvider extends ContentProvider {
         return builder.query(mHelper.getReadableDatabase(),
                 projection,
                 selectionString,
-                new String[]{_id},
+                new String[]{index},
                 null,
                 null,
                 null
@@ -180,7 +180,7 @@ public class ChoreProvider extends ContentProvider {
                 new String[]{ChoreContract.ChoresEntry.TYPE_USER},
                 null,
                 null,
-                null
+                ChoreContract.ChoresEntry.COLUMN_FLOOR_ID + " ASC"
         );
     }
 

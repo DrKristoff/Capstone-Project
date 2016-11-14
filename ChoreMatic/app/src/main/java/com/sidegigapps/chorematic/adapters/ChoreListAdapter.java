@@ -25,12 +25,10 @@ public class ChoreListAdapter extends CursorAdapter {
 
         public static class ViewHolder {
             public final TextView descriptionTextView;
-            public final ImageView choreDoneImageView;
             public int choreID;
 
             public ViewHolder(View view) {
                 descriptionTextView = (TextView) view.findViewById(R.id.choreListItemDescriptionTextView);
-                choreDoneImageView = (ImageView) view.findViewById(R.id.doneImageView);
             }
         }
 
@@ -66,13 +64,6 @@ public class ChoreListAdapter extends CursorAdapter {
                 @Override
                 public void onClick(View view) {
                     ((ChoreListActivity)context).onChoreSelected(viewHolder.choreID);
-                }
-            });
-
-            viewHolder.choreDoneImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
                 }
             });
 

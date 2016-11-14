@@ -173,8 +173,8 @@ public class EmailPasswordActivity extends BaseActivity implements
         // [END sign_in_with_email]
     }
 
-    private void signOut() {
-        mAuth.signOut();
+    public void signOut() {
+        super.signOut();
         updateUI(null);
     }
 

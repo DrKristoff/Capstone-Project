@@ -332,11 +332,11 @@ public class SetupActivity extends BaseActivity {
         }
 
         private void goToChoreList() {
-            Once.markDone(SignInActivity.setupCompleted);
+            Once.markDone(setupCompleted);
+            navigateTo(BaseActivity.TodayActivity);
             startActivity(new Intent(SetupActivity.this, ChoreListActivity.class));
 
         }
-
 
     }
 

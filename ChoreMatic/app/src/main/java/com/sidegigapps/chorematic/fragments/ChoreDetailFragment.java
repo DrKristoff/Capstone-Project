@@ -1,6 +1,5 @@
 package com.sidegigapps.chorematic.fragments;
 
-import android.app.Activity;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -9,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sidegigapps.chorematic.Utils;
-import com.sidegigapps.chorematic.activities.ChoreDetailActivity;
-import com.sidegigapps.chorematic.activities.ChoreListActivity;
 import com.sidegigapps.chorematic.R;
 
 import com.sidegigapps.chorematic.database.ChoreContract;
@@ -29,7 +27,7 @@ public class ChoreDetailFragment extends Fragment implements LoaderManager.Loade
     public static final String DETAIL_URI = "URI";
     private Uri mUri;
 
-    private int floorID = -1;
+    private int floorIndex = -1;
     private int roomID = -1;
     private String floorName;
     private String roomName;
@@ -123,18 +121,21 @@ public class ChoreDetailFragment extends Fragment implements LoaderManager.Loade
             Uri roomUri = ChoreContract.RoomsEntry.CONTENT_URI.buildUpon()
                     .appendPath(String.valueOf(roomID))
                     .build();
+
+            Log.d("RCD","ROOM QUERY: " + roomUri.toString());
             return new CursorLoader(
                     getActivity(),
                     roomUri,
-                    new String[]{ChoreContract.RoomsEntry.COLUMN_DESCRIPTION},
+                    new String[]{ChoreContract.RoomsEntry.COLUMN_DESCRIPTION, ChoreContract.RoomsEntry.COLUMN_FLOOR_INDEX},
                     null,
                     null,
                     null
             );
         } else if(id==FLOOR_LOADER){
-            Uri floorUri = ChoreContract.RoomsEntry.CONTENT_URI.buildUpon()
-                    .appendPath(String.valueOf(floorID))
+            Uri floorUri = ChoreContract.FloorsEntry.CONTENT_URI.buildUpon()
+                    .appendPath(String.valueOf(floorIndex))
                     .build();
+            Log.d("RCD","FLOOR QUERY: " + floorUri.toString());
             return new CursorLoader(
                     getActivity(),
                     floorUri,
@@ -159,7 +160,6 @@ public class ChoreDetailFragment extends Fragment implements LoaderManager.Loade
                 //mDescription.setText(choreDescription);
                 appBarLayout.setTitle(choreDescription);
 
-                floorID = data.getInt(COL_CHORE_FLOOR);
                 roomID = data.getInt(COL_CHORE_ROOM);
 
                 /*String floorName = data.getString(COL_CHORE_FLOOR);
@@ -182,14 +182,16 @@ public class ChoreDetailFragment extends Fragment implements LoaderManager.Loade
                 mNextTimestampTextView.setText(nextTimestamp);
 
                 getLoaderManager().initLoader(ROOM_LOADER, null, this);
-                getLoaderManager().initLoader(FLOOR_LOADER, null, this);
 
             } else if (id == ROOM_LOADER) {
                 String roomDescription = data.getString(data.getColumnIndex(ChoreContract.RoomsEntry.COLUMN_DESCRIPTION));
+                floorIndex = data.getInt(data.getColumnIndex(ChoreContract.RoomsEntry.COLUMN_FLOOR_INDEX));
                 mRoomNameTextView.setText(roomDescription);
+                getLoaderManager().initLoader(FLOOR_LOADER, null, this);
             } else if (id == FLOOR_LOADER) {
                 String floorDescription = data.getString(data.getColumnIndex(ChoreContract.FloorsEntry.DESCRIPTION));
                 mFloorNameTextView.setText(floorDescription);
+
             }
         } else {
             //display loading error

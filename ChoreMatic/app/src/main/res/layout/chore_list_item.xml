@@ -15,13 +15,13 @@
         android:padding="10dp"
         android:orientation="horizontal">
 
-       <ImageView
+<!--       <ImageView
            android:id="@+id/doneImageView"
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:scaleType="centerInside"
            android:alpha="0.3"
-            android:src="@drawable/ic_check_black_48dp" />
+            android:src="@drawable/ic_check_black_48dp" />-->
 
         <TextView
             android:id="@+id/choreListItemDescriptionTextView"

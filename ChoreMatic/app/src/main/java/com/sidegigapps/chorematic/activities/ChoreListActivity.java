@@ -35,7 +35,7 @@ import com.sidegigapps.chorematic.models.Chore;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChoreListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
+public class ChoreListActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>,
         NavigationView.OnNavigationItemSelectedListener  {
 
     private boolean mTwoPane;
@@ -181,13 +181,11 @@ public class ChoreListActivity extends AppCompatActivity implements LoaderManage
         int id = item.getItemId();
 
         if (id == R.id.nav_today) {
-            // Handle the camera action
+            navigateTo(BaseActivity.TodayActivity);
         } else if (id == R.id.nav_calendar) {
-
-        } else if (id == R.id.nav_reset) {
-
+            navigateTo(BaseActivity.CalendarActivity);
         } else if (id == R.id.nav_sign_out) {
-
+            signOut();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
