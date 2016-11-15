@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +17,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.sidegigapps.chorematic.R;
 import com.sidegigapps.chorematic.Utils;
 import com.sidegigapps.chorematic.database.ChoreContract;
@@ -23,6 +29,7 @@ import com.sidegigapps.chorematic.fragments.BaseSetupFragment;
 import com.sidegigapps.chorematic.fragments.FragmentHelper;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -43,15 +50,25 @@ public class SetupActivity extends BaseActivity {
     private int numFloors, mainFloorIndex;
     private String[] floorNames;
 
+    StorageReference storageRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReferenceFromUrl("gs://chore-app-4c0eb.appspot.com");
+
         setContentView(R.layout.activity_setup);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        if(!Once.beenDone(Once.THIS_APP_INSTALL,serviceScheduled)){
+
+            Once.markDone(serviceScheduled);
+        }
 
         numFloors = 1;
         mainFloorIndex = 0;
@@ -60,7 +77,8 @@ public class SetupActivity extends BaseActivity {
 
         controller = new FragmentController();
 
-        setupChoreTemplateDBFromCSV();
+        DownloadCSVFromFireBaseTask task = new DownloadCSVFromFireBaseTask();
+        task.execute();
 
     }
 
@@ -431,45 +449,62 @@ public class SetupActivity extends BaseActivity {
 
     }
 
-    private void setupChoreTemplateDBFromCSV(){
+    public class DownloadCSVFromFireBaseTask extends AsyncTask<Void,Void,Void>{
 
-        ChoreDBHelper helper = new ChoreDBHelper(this);
+        @Override
+        protected Void doInBackground(Void... voids) {
+            StorageReference csvRef = storageRef.child("chores.csv");
 
-        SQLiteDatabase db = helper.getWritableDatabase();
+            final long ONE_MEGABYTE = 1024 * 1024;
+            csvRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    ChoreDBHelper helper = new ChoreDBHelper(SetupActivity.this);
+                    SQLiteDatabase db = helper.getWritableDatabase();
+                    InputStream is;
 
-        InputStream is;
+                    try {
 
-        try {
-            is = getAssets().open("chores.csv");
-            BufferedReader buffer = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-            String line = "";
-            db.beginTransaction();
-            while ((line = buffer.readLine()) != null) {
-                String[] columns = line.split(",");
-                if (columns.length != 4) {
-                    Log.d("CSVParser", "Skipping Bad CSV Row");
-                    continue;
+                        BufferedReader buffer = null;
+                        is = new ByteArrayInputStream(bytes);
+                        buffer = new BufferedReader(new InputStreamReader(is));
+                        String temp = null;
+                        String line = "";
+                        db.beginTransaction();
+                        while ((line = buffer.readLine()) != null) {
+                            String[] columns = line.split(",");
+                            if (columns.length != 4) {
+                                Log.d("CSVParser", "Skipping Bad CSV Row");
+                                continue;
+                            }
+                            ContentValues cv = new ContentValues(5);
+                            cv.put(ChoreContract.ChoresEntry.COLUMN_DESCRIPTION, columns[0].trim());
+                            cv.put(ChoreContract.ChoresEntry.COLUMN_FREQUENCY, columns[1].trim());
+                            cv.put(ChoreContract.ChoresEntry.COLUMN_EFFORT, columns[2].trim());
+                            cv.put(ChoreContract.ChoresEntry.COLUMN_ROOM, columns[3].trim());
+                            cv.put(ChoreContract.ChoresEntry.COLUMN_TYPE, ChoreContract.ChoresEntry.TYPE_TEMPLATE);
+                            db.insert(ChoreContract.ChoresEntry.TABLE_NAME, null, cv);
+                            Log.d("RCD","ADDED TEMPLATE: " +
+                                    columns[0].trim()+","+
+                                    columns[1].trim()+","+
+                                    columns[2].trim()+","+
+                                    columns[3].trim()+","+
+                                    ChoreContract.ChoresEntry.TYPE_TEMPLATE);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    db.setTransactionSuccessful();
+                    db.endTransaction();
                 }
-                ContentValues cv = new ContentValues(5);
-                cv.put(ChoreContract.ChoresEntry.COLUMN_DESCRIPTION, columns[0].trim());
-                cv.put(ChoreContract.ChoresEntry.COLUMN_FREQUENCY, columns[1].trim());
-                cv.put(ChoreContract.ChoresEntry.COLUMN_EFFORT, columns[2].trim());
-                cv.put(ChoreContract.ChoresEntry.COLUMN_ROOM, columns[3].trim());
-                cv.put(ChoreContract.ChoresEntry.COLUMN_TYPE, ChoreContract.ChoresEntry.TYPE_TEMPLATE);
-                db.insert(ChoreContract.ChoresEntry.TABLE_NAME, null, cv);
-                Log.d("RCD","ADDED TEMPLATE: " +
-                        columns[0].trim()+","+
-                        columns[1].trim()+","+
-                        columns[2].trim()+","+
-                        columns[3].trim()+","+
-                        ChoreContract.ChoresEntry.TYPE_TEMPLATE);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle any errors
+                }
+            });
+            return null;
         }
-        db.setTransactionSuccessful();
-        db.endTransaction();
-
     }
 
 }

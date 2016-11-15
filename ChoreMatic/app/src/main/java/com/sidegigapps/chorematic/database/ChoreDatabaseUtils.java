@@ -84,7 +84,6 @@ public class ChoreDatabaseUtils {
                 "-1"
         };
 
-
         long dayNumber = Utils.convertMillisecondsToDays(System.currentTimeMillis());
         contentValues.put(ChoreContract.ChoresEntry.COLUMN_NEXT_DUE, dayNumber);
 
@@ -157,5 +156,27 @@ public class ChoreDatabaseUtils {
 
         Log.d("RCD","rows updated: " + String.valueOf(rowsUpdated));
 
+    }
+
+    public void initializeNewDay() {
+        Uri uri = ChoreContract.ChoresEntry.CONTENT_URI;
+        String todayIndexString = Utils.convertTodayToStringForDB();
+        ContentValues contentValues = new ContentValues();
+        String selectionClause = ChoreContract.ChoresEntry.TABLE_NAME +"." +
+                ChoreContract.ChoresEntry.COLUMN_NEXT_DUE + "<?";
+        String[] selectionArgs = new String[]{
+                todayIndexString
+        };
+
+        contentValues.put(ChoreContract.ChoresEntry.COLUMN_NEXT_DUE, todayIndexString);
+
+        int rowsUpdated = context.getContentResolver().update(
+                uri,
+                contentValues,
+                selectionClause,
+                selectionArgs
+        );
+
+        Log.d("RCD","rows updated: " + String.valueOf(rowsUpdated));
     }
 }

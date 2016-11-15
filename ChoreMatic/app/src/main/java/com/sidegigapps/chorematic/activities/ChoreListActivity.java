@@ -1,5 +1,8 @@
 package com.sidegigapps.chorematic.activities;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -193,4 +196,5 @@ public class ChoreListActivity extends BaseActivity implements LoaderManager.Loa
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }
