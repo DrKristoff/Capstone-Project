@@ -44,7 +44,7 @@ public class ChoreDBHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_CHORES_TABLE = "CREATE TABLE " + ChoresEntry.TABLE_NAME + " (" +
                 ChoresEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 ChoresEntry.COLUMN_DESCRIPTION + " TEXT NOT NULL," +
-                ChoresEntry.COLUMN_FREQUENCY + " TEXT NOT NULL," +
+                ChoresEntry.COLUMN_FREQUENCY + " INTEGER NOT NULL," +
                 ChoresEntry.COLUMN_EFFORT + " TEXT NOT NULL," +
                 ChoresEntry.COLUMN_ROOM + " TEXT NOT NULL,"+
                 ChoresEntry.COLUMN_FLOOR_ID + " INTEGER,"+

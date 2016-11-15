@@ -5,6 +5,10 @@ import android.content.res.TypedArray;
 import android.text.format.Time;
 import android.util.TypedValue;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by ryand on 11/6/2016.
  */
@@ -45,6 +49,30 @@ public class Utils {
         return time.setJulianDay(julianDay);
     }
 
+    public static long convertMillisecondsToDays(long date){
+        return date/1000/60/60/24;
+    }
+
+    public static String formatDatabaseDateForUI(String longString){
+        return formatDatabaseDateForUI(Long.parseLong(longString));
+    }
+    public static String formatDatabaseDateForUI(long databaseDate){
+        //if it's today, return "Today"
+        if(databaseDate == convertMillisecondsToDays(System.currentTimeMillis())){
+            return "Today";
+        }
+        //otherwise display day of the week
+        SimpleDateFormat formatter = new SimpleDateFormat("EEEE");
+        long milliseconds = databaseDate*24*60*60*1000;
+        Date date = new Date();
+        date.setTime(milliseconds);
+
+
+
+
+        return formatter.format(date);
+    }
+
     public static String getOrdinalNumber(int number){
             //0 > 1
             if(!(number >= 1 && number <= 31)) return null;
@@ -83,5 +111,10 @@ public class Utils {
             default:
                 return R.drawable.ic_high;
         }
+    }
+
+    public static String getTodayString() {
+        long date = convertMillisecondsToDays(System.currentTimeMillis());
+        return String.valueOf(date);
     }
 }

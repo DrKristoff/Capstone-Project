@@ -78,12 +78,12 @@ public class ChoreListAdapter extends CursorAdapter {
                 @Override
                 public void onClick(View view) {
                     if(viewHolder.descriptionTextView.isChecked()){
-                        ((ChoreListActivity)context).markChoreAsDone(viewHolder.choreID);
+                        ((ChoreListActivity)context).markChoreAsToDo(viewHolder.choreID);
                         viewHolder.descriptionTextView.setChecked(false);
                         viewHolder.descriptionTextView.setPaintFlags(
                                 viewHolder.descriptionTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                     } else {
-                        ((ChoreListActivity)context).markChoreAsToDo(viewHolder.choreID);
+                        ((ChoreListActivity)context).markChoreAsDone(viewHolder.choreID);
                         viewHolder.descriptionTextView.setChecked(true);
                         viewHolder.descriptionTextView.setPaintFlags(
                                 viewHolder.descriptionTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);

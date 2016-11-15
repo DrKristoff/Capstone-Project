@@ -2,7 +2,6 @@ package com.sidegigapps.chorematic.activities;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -10,34 +9,24 @@ import android.support.v4.app.LoaderManager;
 
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.sidegigapps.chorematic.R;
+import com.sidegigapps.chorematic.Utils;
 import com.sidegigapps.chorematic.adapters.ChoreListAdapter;
 import com.sidegigapps.chorematic.database.ChoreContract;
 import com.sidegigapps.chorematic.database.ChoreContract.ChoresEntry;
+import com.sidegigapps.chorematic.database.ChoreDatabaseUtils;
 import com.sidegigapps.chorematic.fragments.ChoreDetailFragment;
 import com.sidegigapps.chorematic.models.Chore;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ChoreListActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>,
         NavigationView.OnNavigationItemSelectedListener  {
@@ -45,7 +34,8 @@ public class ChoreListActivity extends BaseActivity implements LoaderManager.Loa
     private boolean mTwoPane;
     private ListView mListView;
     private ChoreListAdapter mChoreListAdapter;
-    private ArrayList<Chore> mChoreList;
+
+    ChoreDatabaseUtils dbUtils;
 
     private static final String CHOREDETAILFRAGMENT_TAG = "CDFTAG";
 
@@ -69,6 +59,9 @@ public class ChoreListActivity extends BaseActivity implements LoaderManager.Loa
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
+        dbUtils = new ChoreDatabaseUtils(this);
+        dbUtils.scheduleAllUnscheduledChores();
+
 /*        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +73,6 @@ public class ChoreListActivity extends BaseActivity implements LoaderManager.Loa
 
         mListView = (ListView) findViewById(R.id.chore_list);
 
-        mChoreList = new ArrayList<>();
         mChoreListAdapter = new ChoreListAdapter(this,null,0);
         mListView.setAdapter(mChoreListAdapter);
 
@@ -117,11 +109,11 @@ public class ChoreListActivity extends BaseActivity implements LoaderManager.Loa
         }
     }
 
-
-
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri mUri = ChoreContract.ChoresEntry.CONTENT_URI;
+        Uri mUri = ChoreContract.ChoresEntry.CONTENT_URI
+                .buildUpon().appendPath("date").appendPath(Utils.getTodayString())
+                .build();
         if ( null != mUri ) {
             return new CursorLoader(
                     this,
@@ -157,11 +149,13 @@ public class ChoreListActivity extends BaseActivity implements LoaderManager.Loa
     }
 
     public void markChoreAsDone(int choreID){
-
+        dbUtils.markChoreAsDoneAndReschedule(choreID);
     }
 
     public void markChoreAsToDo(int choreID){
-
+        ///TO DO
+        // if you have checked it as done and want to un do
+        //
     }
 
     public void onChoreSelected(Uri contentUri) {

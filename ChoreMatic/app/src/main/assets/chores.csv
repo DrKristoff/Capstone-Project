@@ -1,10 +1,10 @@
-vacuum,3 days,low,living room
-vacuum,3 days,low,bedroom
-vacuum,3 days,low,family room
-sweep floors,3 days,low,dining room
-deep clean oven,3 months,high,kitchen
-wipe counters,1 day,low,kitchen
-sweep floors,3 days,low,laundry
-clean toilet,1 day,low,bathroom
-clean toilet with chemicals,7 days,low,bathroom
-sweep floors,7 days,low,laundry
+vacuum,3,low,living room
+vacuum,3,low,bedroom
+vacuum,3,low,family room
+sweep floors,3,low,dining room
+deep clean oven,90,high,kitchen
+wipe counters,1,low,kitchen
+sweep floors,3,low,laundry
+clean toilet,1,low,bathroom
+clean toilet with chemicals,7,low,bathroom
+sweep floors,7,low,laundry

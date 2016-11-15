@@ -176,10 +176,19 @@ public class ChoreDetailFragment extends Fragment implements LoaderManager.Loade
                 mFrequencyTextView.setText(frequency);
 
                 String lastTimestamp = data.getString(COL_CHORE_LAST);
-                mLastTimestampTextView.setText(lastTimestamp);
+                if(lastTimestamp.equals("-1")){
+                    mLastTimestampTextView.setText("N/A");
+                } else {
+                    mLastTimestampTextView.setText(Utils.formatDatabaseDateForUI(lastTimestamp));
+                }
+
 
                 String nextTimestamp = data.getString(COL_CHORE_NEXT);
-                mNextTimestampTextView.setText(nextTimestamp);
+                if(nextTimestamp.equals("-1")){
+                    mNextTimestampTextView.setText("unscheduled");
+                } else {
+                    mNextTimestampTextView.setText(Utils.formatDatabaseDateForUI(nextTimestamp));
+                }
 
                 getLoaderManager().initLoader(ROOM_LOADER, null, this);
 

@@ -43,7 +43,11 @@
                     android:text="ROOM" />
 
             </TableRow>
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_margin="10dp"
+            android:layout_height="1px"
+            android:background="@color/colorAccent"/>
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -74,6 +78,11 @@
                     android:text="FREQUENCY" />
 
             </TableRow>
+        <View
+            android:layout_width="match_parent"
+            android:layout_margin="10dp"
+            android:layout_height="1px"
+            android:background="@color/colorAccent"/>
 
             <TableRow
                 android:layout_width="match_parent"

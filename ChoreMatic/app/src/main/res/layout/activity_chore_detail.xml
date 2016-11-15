@@ -48,6 +48,6 @@
         android:layout_margin="@dimen/fab_margin"
         app:layout_anchor="@+id/chore_detail_container"
         app:layout_anchorGravity="top|end"
-        app:srcCompat="@drawable/ic_check_black_48dp" />
+        app:srcCompat="@drawable/ic_action_done" />
 
 </android.support.design.widget.CoordinatorLayout>

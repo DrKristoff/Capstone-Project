@@ -365,11 +365,13 @@ public class SetupActivity extends BaseActivity {
         db.beginTransaction();
         try {
             if (cursor.moveToFirst()) {
-                ContentValues cv = new ContentValues(5);
+                ContentValues cv = new ContentValues(7);
                 cv.put(ChoreContract.ChoresEntry.COLUMN_DESCRIPTION, cursor.getString(cursor.getColumnIndex(ChoreContract.ChoresEntry.COLUMN_DESCRIPTION)));
                 cv.put(ChoreContract.ChoresEntry.COLUMN_FREQUENCY, cursor.getString(cursor.getColumnIndex(ChoreContract.ChoresEntry.COLUMN_FREQUENCY)));
                 cv.put(ChoreContract.ChoresEntry.COLUMN_EFFORT, cursor.getString(cursor.getColumnIndex(ChoreContract.ChoresEntry.COLUMN_EFFORT)));
                 cv.put(ChoreContract.ChoresEntry.COLUMN_ROOM, roomID);
+                cv.put(ChoreContract.ChoresEntry.COLUMN_LAST_DONE, -1);
+                cv.put(ChoreContract.ChoresEntry.COLUMN_NEXT_DUE, -1);
                 cv.put(ChoreContract.ChoresEntry.COLUMN_TYPE, ChoreContract.ChoresEntry.TYPE_USER);
                 db.insert(ChoreContract.ChoresEntry.TABLE_NAME, null, cv);
 

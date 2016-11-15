@@ -64,7 +64,7 @@ public class ChoreProvider extends ContentProvider {
             }
             case CHORES_BY_ID:
             {
-                retCursor = getUserChoresByID(uri, projection, selection);
+                retCursor = getUserChoreByID(uri, projection, selection);
                 break;
             }
             case ROOMS:
@@ -204,7 +204,7 @@ public class ChoreProvider extends ContentProvider {
         );
     }
 
-    private Cursor getUserChoresByID(Uri uri, String[] projection, String frequency){
+    private Cursor getUserChoreByID(Uri uri, String[] projection, String frequency){
         String _id = uri.getPathSegments().get(2);
         String selectionString = ChoreContract.ChoresEntry.TABLE_NAME +
                 "." + ChoreContract.ChoresEntry._ID + "=?";
