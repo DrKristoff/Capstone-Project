@@ -55,6 +55,7 @@
             android:layout_width="240dp"
             android:layout_height="100dp"
             android:scaleType="fitXY"
+            android:contentDescription="@string/cd_roof"
             android:layout_gravity="center_horizontal"
             android:layout_centerVertical="true"
             android:background="@null"

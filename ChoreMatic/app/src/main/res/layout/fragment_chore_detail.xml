@@ -55,6 +55,7 @@
                 <ImageView
                     style="@style/ChoreDetailData"
                     android:id="@+id/effortLevelImageView"
+                    android:contentDescription="@string/cd_effort_level_indicator"
                     android:elevation="2dp"
                     android:src="@drawable/ic_high" />
 

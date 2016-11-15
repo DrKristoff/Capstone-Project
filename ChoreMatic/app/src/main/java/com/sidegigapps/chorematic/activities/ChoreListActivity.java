@@ -1,13 +1,12 @@
 package com.sidegigapps.chorematic.activities;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 
 import android.support.v4.content.CursorLoader;
@@ -16,8 +15,10 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import com.sidegigapps.chorematic.R;
@@ -32,7 +33,7 @@ public class ChoreListActivity extends BaseActivity implements LoaderManager.Loa
         NavigationView.OnNavigationItemSelectedListener  {
 
     private boolean mTwoPane;
-    private ListView mListView;
+    ListView mListView;
     private ChoreListAdapter mChoreListAdapter;
 
     ChoreDatabaseUtils dbUtils;
@@ -160,12 +161,23 @@ public class ChoreListActivity extends BaseActivity implements LoaderManager.Loa
             ChoreDetailFragment fragment = new ChoreDetailFragment();
             fragment.setArguments(args);
 
-            getSupportFragmentManager().beginTransaction()
+
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fm.beginTransaction();
+            fragmentTransaction.setCustomAnimations(R.anim.fade_in,
+                    R.anim.fade_out);
+
+            fragmentTransaction
                     .replace(R.id.chore_detail_container, fragment, CHOREDETAILFRAGMENT_TAG)
                     .commit();
         } else {
             Intent intent = new Intent(this, ChoreDetailActivity.class)
                     .setData(contentUri);
+            Animation a = AnimationUtils.loadAnimation(this, R.anim.slide);
+            a.reset();
+            FrameLayout fl = (FrameLayout) findViewById(R.id.frameLayout);
+            fl.clearAnimation();
+            fl.startAnimation(a);
             startActivity(intent);
         }
     }

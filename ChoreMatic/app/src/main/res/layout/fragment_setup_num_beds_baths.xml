@@ -97,6 +97,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="80dp"
+                    android:contentDescription="@string/cd_one_bedroom"
                     android:layout_gravity="center_vertical"
                     app:srcCompat="@drawable/one_selected"
                     android:id="@+id/imageViewOneBedroom" />
@@ -105,6 +106,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="80dp"
+                    android:contentDescription="@string/cd_two_bedrooms"
                     android:layout_gravity="center_vertical"
                     app:srcCompat="@drawable/two"
                     android:id="@+id/imageViewTwoBedrooms" />
@@ -113,6 +115,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="80dp"
+                    android:contentDescription="@string/cd_three_bedrooms"
                     android:layout_gravity="center_vertical"
                     app:srcCompat="@drawable/three"
                     android:id="@+id/imageViewThreeBedrooms" />
@@ -166,6 +169,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="80dp"
+                    android:contentDescription="@string/cd_one_bathroom"
                     android:layout_gravity="center_vertical"
                     app:srcCompat="@drawable/one_selected"
                     android:id="@+id/imageViewOneBathroom" />
@@ -174,6 +178,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="80dp"
+                    android:contentDescription="@string/cd_two_bathrooms"
                     android:layout_gravity="center_vertical"
                     app:srcCompat="@drawable/two"
                     android:id="@+id/imageViewTwoBathrooms" />
@@ -182,6 +187,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="80dp"
+                    android:contentDescription="@string/cd_three_bathrooms"
                     android:layout_gravity="center_vertical"
                     app:srcCompat="@drawable/three"
                     android:id="@+id/imageViewThreeBathrooms" />

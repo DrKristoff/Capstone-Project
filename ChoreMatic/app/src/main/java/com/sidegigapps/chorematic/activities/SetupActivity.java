@@ -35,20 +35,19 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Vector;
 
 import jonathanfinerty.once.Once;
 
 public class SetupActivity extends BaseActivity {
 
-    private FrameLayout fragmentFrameLayout;
+    FrameLayout fragmentFrameLayout;
     FragmentController controller;
 
     ArrayList<HashMap<String,Integer>> roomsList = new ArrayList<>();
     ChoreDBHelper helper;
 
     private int numFloors, mainFloorIndex;
-    private String[] floorNames;
+    String[] floorNames;
 
     StorageReference storageRef;
 
@@ -420,13 +419,6 @@ public class SetupActivity extends BaseActivity {
                 ChoreContract.ChoresEntry.COLUMN_LAST_DONE,
                 ChoreContract.ChoresEntry.COLUMN_NEXT_DUE
         };
-
-        String floor = "bedroom";
-
-        //Uri testUri = ChoreContract.ChoresEntry.buildFloorUri(floor);
-        //Uri weatherUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationQuery, System.currentTimeMillis());
-
-        //Cursor cursor = getContentResolver().query(testUri,)
 
         Cursor cursor = db.query(ChoreContract.ChoresEntry.TABLE_NAME, CHORE_PROJECTION,
                  null, null, null, null, null);

@@ -107,4 +107,20 @@
     <string name="calendar_nav_menu">Calendar</string>
     <string name="user_group_nav_menu">User</string>
     <string name="sign_out_nav_menu">Sign Out</string>
+    <string name="coming_soon_string">COMING SOON!</string>
+    <string name="cd_app_logo">App Logo</string>
+    <string name="cd_view_chore_details">View Chore Details</string>
+    <string name="cd_one_bedroom">One Bedroom</string>
+    <string name="cd_two_bedrooms">Two Bedrooms</string>
+    <string name="cd_three_bedrooms">Three Bedrooms</string>
+    <string name="cd_one_bathroom">one bathroom</string>
+    <string name="cd_two_bathrooms">two bathrooms</string>
+    <string name="cd_three_bathrooms">three bathrooms</string>
+    <string name="cd_roof">roof</string>
+    <string name="cd_first_floor">first floor</string>
+    <string name="cd_one_floor">one floor</string>
+    <string name="cd_two_floors">two floors</string>
+    <string name="cd_three_floors">three floors</string>
+    <string name="cd_effort_level_indicator">effort level indicator</string>
+    <string name="cd_profile_image">Profile Image</string>
 </resources>

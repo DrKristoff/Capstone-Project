@@ -3,24 +3,15 @@ package com.sidegigapps.chorematic.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.sidegigapps.chorematic.R;
 import com.sidegigapps.chorematic.database.ChoreDatabaseUtils;
 import com.sidegigapps.chorematic.fragments.ChoreDetailFragment;
 
-/**
- * An activity representing a single Chore detail screen. This
- * activity is only used narrow width devices. On tablet-size devices,
- * item details are presented side-by-side with a list of items
- * in a {@link ChoreListActivity}.
- */
 public class ChoreDetailActivity extends BaseActivity {
 
     ChoreDetailFragment fragment;

@@ -3,25 +3,16 @@ package com.sidegigapps.chorematic.adapters;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Paint;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.CursorAdapter;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.sidegigapps.chorematic.R;
-import com.sidegigapps.chorematic.activities.BaseActivity;
 import com.sidegigapps.chorematic.activities.ChoreListActivity;
 import com.sidegigapps.chorematic.database.ChoreContract;
-
-/**
- * Created by ryand on 11/13/2016.
- */
 
 public class ChoreListAdapter extends CursorAdapter {
 

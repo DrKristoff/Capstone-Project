@@ -26,6 +26,7 @@
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
+        android:contentDescription="@string/cd_app_logo"
         android:layout_height="200dp"
         app:srcCompat="@drawable/hq_logo" />
 
