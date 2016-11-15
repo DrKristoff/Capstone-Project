@@ -65,7 +65,6 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
     public void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
-            //mProgressDialog.setMessage(getString(R.string.loading));
             mProgressDialog.setIndeterminate(true);
         }
 
@@ -93,13 +92,10 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    Log.d("RCD", "onAuthStateChanged:signed_in:" + user.getUid());
+                    Log.d(getString(R.string.rcd_debug_tag), getString(R.string.auth_state_signed_in) + user.getUid());
 
                     saveUserProfileData(user);
 
-                    // The user's ID, unique to the Firebase project. Do NOT use this value to
-                    // authenticate with your backend server, if you have one. Use
-                    // FirebaseUser.getToken() instead.
                     String uid = user.getUid();
 
                     //to prevent the auth listener being triggered multiple times
@@ -117,7 +113,7 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
 
                 } else {
                     // User is signed out
-                    Log.d("RCD", "onAuthStateChanged:signed_out");
+                    Log.d(getString(R.string.rcd_debug_tag), getString(R.string.auth_state_signed_out));
                 }
             }
         };
@@ -140,10 +136,10 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
         TextView profileName = (TextView) headerView.findViewById(R.id.profileName);
         TextView profileEmail = (TextView) headerView.findViewById(R.id.profileEmail);
 
-        SharedPreferences prefs = getSharedPreferences("user_data", 0);
-        String profileNameString = prefs.getString("prefs_user_name","ChoreMatic User");
-        String profileEmailString = prefs.getString("prefs_user_email","ChoreMatic User email");
-        String profileImageUrl = prefs.getString("prefs_user_photo","ChoreMatic User");
+        SharedPreferences prefs = getSharedPreferences(getString(R.string.user_data), 0);
+        String profileNameString = prefs.getString(getString(R.string.prefs_user_name),getString(R.string.chorematic_user));
+        String profileEmailString = prefs.getString(getString(R.string.prefs_user_email),getString(R.string.chorematic_user_email));
+        String profileImageUrl = prefs.getString(getString(R.string.prefs_user_photo),getString(R.string.chorematic_user));
 
         profileName.setText(profileNameString);
         profileEmail.setText(profileEmailString);
@@ -157,20 +153,20 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     public void showChoreCompleteToast(){
-        Toast.makeText(BaseActivity.this,"Chore marked complete",Toast.LENGTH_SHORT).show();
+        Toast.makeText(BaseActivity.this, R.string.chore_marked_complete,Toast.LENGTH_SHORT).show();
     }
 
     private void saveUserProfileData(FirebaseUser user){
-        SharedPreferences sharedPreferences = getSharedPreferences("user_data", 0);
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.user_data), 0);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
         for (UserInfo profile : user.getProviderData()) {
             String name = profile.getDisplayName();
             String email = profile.getEmail();
             Uri photoUrl = profile.getPhotoUrl();
 
-            editor.putString("prefs_user_name", name);
-            if(email!=null) editor.putString("prefs_user_email", email);
-            if(photoUrl!=null) editor.putString("prefs_user_photo", photoUrl.toString());
+            editor.putString(getString(R.string.prefs_user_name), name);
+            if(email!=null) editor.putString("getString(R.string.prefs_user_email)", email);
+            if(photoUrl!=null) editor.putString(getString(R.string.prefs_user_photo), photoUrl.toString());
             editor.apply();
         };
 
@@ -244,7 +240,7 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        Log.d("RCD", "firebaseAuthWithGoogle:" + acct.getId());
+        Log.d(getString(R.string.rcd_debug_tag), "firebaseAuthWithGoogle:" + acct.getId());
 
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -252,13 +248,13 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("RCD", "signInWithCredential:onComplete:" + task.isSuccessful());
+                        Log.d(getString(R.string.rcd_debug_tag), "signInWithCredential:onComplete:" + task.isSuccessful());
 
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            Log.w("RCD","signInWithCredential", task.getException());
+                            Log.w(getString(R.string.rcd_debug_tag),"signInWithCredential", task.getException());
                             Toast.makeText(BaseActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -269,20 +265,16 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
 
 
     private void handleSignInResult(GoogleSignInResult result) {
-        Log.d("RCD", "handleSignInResult:" + result.isSuccess());
+        Log.d(getString(R.string.rcd_debug_tag), "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
 
             TextView view = (TextView) findViewById(R.id.auth_status);
-            //view.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
             view.setText(acct.getDisplayName());
-            //updateUI(true);
 
         } else {
 
-            // Signed out, show unauthenticated UI.
-            //updateUI(false);
         }
     }
 

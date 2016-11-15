@@ -39,7 +39,7 @@ public class UpdateChoresReceiver extends BroadcastReceiver {
                 new NotificationCompat.Builder(context)
                         .setColor(context.getResources().getColor(R.color.colorPrimary))
                         .setSmallIcon(R.drawable.hq_logo)
-                        .setContentTitle("ChoreMatic chores updated for " + Utils.getDateStringForWidget())
+                        .setContentTitle(context.getString(R.string.notification_text) + Utils.getDateStringForWidget())
                         .setContentText(Utils.getStringForWidget(context,numChores));
 
         Intent resultIntent = new Intent(context, ChoreListActivity.class);

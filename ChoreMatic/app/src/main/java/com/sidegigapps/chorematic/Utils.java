@@ -54,25 +54,25 @@ public class Utils {
         return date/1000/60/60/24;
     }
 
-    public static String formatDatabaseDateForUI(String longString){
-        return formatDatabaseDateForUI(Long.parseLong(longString));
+    public static String formatDatabaseDateForUI(String longString, Context context){
+        return formatDatabaseDateForUI(Long.parseLong(longString),context);
     }
-    public static String formatDatabaseDateForUI(long databaseDate){
+    public static String formatDatabaseDateForUI(long databaseDate, Context context){
         long todayTimestamp = convertMillisecondsToDays(System.currentTimeMillis());
         Date date = new Date();
         SimpleDateFormat formatter;
         //if it's today, return "Today"
         if(databaseDate == todayTimestamp){
-            return "Today";
+            return context.getString(R.string.today);
         } else if(todayTimestamp-databaseDate > 7 ){
             //otherwise display day of the week
-            formatter = new SimpleDateFormat("MM/DD");
+            formatter = new SimpleDateFormat(context.getString(R.string.mm_dd_date_format));
             long milliseconds = databaseDate*24*60*60*1000;
             date.setTime(milliseconds);
 
         } else {
             //otherwise display day of the week
-            formatter = new SimpleDateFormat("EEEE");
+            formatter = new SimpleDateFormat(context.getString(R.string.format_day_of_the_week));
             long milliseconds = databaseDate*24*60*60*1000;
             date.setTime(milliseconds);
 
@@ -139,7 +139,7 @@ public class Utils {
         } else if(numChores==1){
             return context.getString(R.string.widget_one_left);
         } else {
-            return String.format(context.getString(R.string.widget_num_chores_left),numChores);
+            return String.format(context.getString(R.string.widget_num_chores_left),String.valueOf(numChores));
         }
     }
 }

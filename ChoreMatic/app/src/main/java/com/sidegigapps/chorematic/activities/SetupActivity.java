@@ -95,7 +95,7 @@ public class SetupActivity extends BaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
         controller.currentPage-=1;
-        Log.d("RCD","Current Page: " + String.valueOf(controller.currentPage));
+        Log.d(getString(R.string.rcd_debug_tag),"Current Page: " + String.valueOf(controller.currentPage));
     }
 
     public void setMainFloorIndex(int num){
@@ -265,14 +265,14 @@ public class SetupActivity extends BaseActivity {
         public void nextPage() {
             if (currentPage<fragmentList.size()-1) {
                 currentPage +=1;
-                Log.d("RCD","Current Page: " + String.valueOf(currentPage));
+                Log.d(getString(R.string.rcd_debug_tag),"Current Page: " + String.valueOf(currentPage));
                 displayFragment();
             }
         }
 
         public void previousPage() {
             if (currentPage>0) {
-                Log.d("RCD","Current Page: " + String.valueOf(currentPage));
+                Log.d(getString(R.string.rcd_debug_tag),"Current Page: " + String.valueOf(currentPage));
                 onBackPressed();
             }
         }
@@ -311,7 +311,7 @@ public class SetupActivity extends BaseActivity {
                         roomValues.put(ChoreContract.RoomsEntry.COLUMN_FLOOR_INDEX,i);
                         db.insert(ChoreContract.RoomsEntry.TABLE_NAME, null, roomValues);
                         //roomsVector.add(roomValues);
-                        Log.d("RCD",room + " on floor " + String.valueOf(i) + " added");
+                        Log.d(getString(R.string.rcd_debug_tag),room + " on floor " + String.valueOf(i) + " added");
                         num-=1;
                         floorRoomsMap.put(room,num);
 
@@ -332,7 +332,7 @@ public class SetupActivity extends BaseActivity {
                 while(!cursor.isAfterLast()){
                     String roomID = cursor.getString(cursor.getColumnIndex(ChoreContract.RoomsEntry._ID));
                     String description = cursor.getString(cursor.getColumnIndex(ChoreContract.RoomsEntry.COLUMN_DESCRIPTION));
-                    Log.d("RCD","setting up the " + description + " room, " + roomID);
+                    Log.d(getString(R.string.rcd_debug_tag),"setting up the " + description + " room, " + roomID);
                     addUserChoresToDatabaseFromTemplate(description, roomID);
 
                     cursor.moveToNext();
@@ -387,7 +387,7 @@ public class SetupActivity extends BaseActivity {
                 cv.put(ChoreContract.ChoresEntry.COLUMN_TYPE, ChoreContract.ChoresEntry.TYPE_USER);
                 db.insert(ChoreContract.ChoresEntry.TABLE_NAME, null, cv);
 
-                Log.d("RCD","ADDED REAL CHORE: " +
+                Log.d(getString(R.string.rcd_debug_tag),"ADDED REAL CHORE: " +
                         cursor.getString(cursor.getColumnIndex(ChoreContract.ChoresEntry.COLUMN_DESCRIPTION))+","+
                         cursor.getString(cursor.getColumnIndex(ChoreContract.ChoresEntry.COLUMN_FREQUENCY))+","+
                         cursor.getString(cursor.getColumnIndex(ChoreContract.ChoresEntry.COLUMN_EFFORT))+","+
@@ -428,7 +428,7 @@ public class SetupActivity extends BaseActivity {
                 String description = cursor.getString(cursor.getColumnIndex("description"));
                 String room = cursor.getString(cursor.getColumnIndex("room"));
                 String frequency = cursor.getString(cursor.getColumnIndex("frequency"));
-                Log.d("RCD",description+ " in the " + room + " every " + frequency);
+                Log.d(getString(R.string.rcd_debug_tag),description+ " in the " + room + " every " + frequency);
                 cursor.moveToNext();
             }
         }
@@ -471,7 +471,7 @@ public class SetupActivity extends BaseActivity {
                             cv.put(ChoreContract.ChoresEntry.COLUMN_ROOM, columns[3].trim());
                             cv.put(ChoreContract.ChoresEntry.COLUMN_TYPE, ChoreContract.ChoresEntry.TYPE_TEMPLATE);
                             db.insert(ChoreContract.ChoresEntry.TABLE_NAME, null, cv);
-                            Log.d("RCD","ADDED TEMPLATE: " +
+                            Log.d(getString(R.string.rcd_debug_tag),"ADDED TEMPLATE: " +
                                     columns[0].trim()+","+
                                     columns[1].trim()+","+
                                     columns[2].trim()+","+

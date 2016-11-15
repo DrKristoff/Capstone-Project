@@ -128,7 +128,7 @@ public class NumFloorsSetupFragment extends BaseSetupFragment implements View.On
 
     private void addFloor(){
         if(numFloors ==3){
-            Toast.makeText(getActivity(),"Max of 3 floors",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.max_floors_toast,Toast.LENGTH_SHORT).show();
             return;
         }
         numFloors +=1;

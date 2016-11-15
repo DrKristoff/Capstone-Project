@@ -123,7 +123,7 @@ public class ChoreDetailFragment extends Fragment implements LoaderManager.Loade
                     .appendPath(String.valueOf(roomID))
                     .build();
 
-            Log.d("RCD","ROOM QUERY: " + roomUri.toString());
+            Log.d(getString(R.string.rcd_debug_tag),"ROOM QUERY: " + roomUri.toString());
             return new CursorLoader(
                     getActivity(),
                     roomUri,
@@ -136,7 +136,7 @@ public class ChoreDetailFragment extends Fragment implements LoaderManager.Loade
             Uri floorUri = ChoreContract.FloorsEntry.CONTENT_URI.buildUpon()
                     .appendPath(String.valueOf(floorIndex))
                     .build();
-            Log.d("RCD","FLOOR QUERY: " + floorUri.toString());
+            Log.d(getString(R.string.rcd_debug_tag),"FLOOR QUERY: " + floorUri.toString());
             return new CursorLoader(
                     getActivity(),
                     floorUri,
@@ -178,7 +178,7 @@ public class ChoreDetailFragment extends Fragment implements LoaderManager.Loade
                 if(lastTimestamp.equals("-1")){
                     mLastTimestampTextView.setText(R.string.not_applicable_string);
                 } else {
-                    mLastTimestampTextView.setText(Utils.formatDatabaseDateForUI(lastTimestamp));
+                    mLastTimestampTextView.setText(Utils.formatDatabaseDateForUI(lastTimestamp,getContext()));
                 }
 
 
@@ -186,7 +186,7 @@ public class ChoreDetailFragment extends Fragment implements LoaderManager.Loade
                 if(nextTimestamp.equals("-1")){
                     mNextTimestampTextView.setText(R.string.unscheduled_string);
                 } else {
-                    mNextTimestampTextView.setText(Utils.formatDatabaseDateForUI(nextTimestamp));
+                    mNextTimestampTextView.setText(Utils.formatDatabaseDateForUI(nextTimestamp,getContext()));
                 }
 
                 getLoaderManager().initLoader(ROOM_LOADER, null, this);

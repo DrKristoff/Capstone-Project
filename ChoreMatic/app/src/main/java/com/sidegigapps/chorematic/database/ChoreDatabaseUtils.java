@@ -48,7 +48,6 @@ public class ChoreDatabaseUtils {
                 selectionArgs
         );
 
-        Log.d("RCD","rows updated: " + String.valueOf(rowsUpdated));
     }
 
     public int getNumChoresLeftTodayForWidget(){
@@ -94,7 +93,6 @@ public class ChoreDatabaseUtils {
                 selectionArgs
         );
 
-        Log.d("RCD","rows updated: " + String.valueOf(rowsUpdated));
 
     }
 
@@ -129,7 +127,6 @@ public class ChoreDatabaseUtils {
             scheduleChoreByDate(choreID,today+choreFrequency);
             markChoreDoneToday(choreID);
         }  else {
-            Log.d("RCD","problem finding Chore ID");
         }
     }
 
@@ -154,7 +151,6 @@ public class ChoreDatabaseUtils {
                 selectionArgs
         );
 
-        Log.d("RCD","rows updated: " + String.valueOf(rowsUpdated));
 
     }
 
@@ -177,6 +173,5 @@ public class ChoreDatabaseUtils {
                 selectionArgs
         );
 
-        Log.d("RCD","rows updated: " + String.valueOf(rowsUpdated));
     }
 }

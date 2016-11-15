@@ -74,7 +74,7 @@ public class FloorDetailsSetupFragment extends BaseSetupFragment implements View
             }
         }
 
-        Log.d("RCD","Size of result: " + String.valueOf(roomsSelected.size()));
+        Log.d(getString(R.string.rcd_debug_tag),"Size of result: " + String.valueOf(roomsSelected.size()));
 
     }
 

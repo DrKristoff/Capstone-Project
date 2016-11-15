@@ -91,8 +91,6 @@ public class ChoreProvider extends ContentProvider {
         String selectionString = ChoreContract.RoomsEntry.TABLE_NAME +
                 "." + ChoreContract.RoomsEntry._ID + "= ?";
 
-        Log.d("RCD",selectionString);
-
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables(ChoreContract.RoomsEntry.TABLE_NAME);
 
@@ -110,8 +108,6 @@ public class ChoreProvider extends ContentProvider {
         String index = uri.getPathSegments().get(1);
         String selectionString = ChoreContract.FloorsEntry.TABLE_NAME +
                 "." + ChoreContract.FloorsEntry.INDEX + "= ?";
-
-        Log.d("RCD",selectionString);
 
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables(ChoreContract.FloorsEntry.TABLE_NAME);
@@ -132,8 +128,6 @@ public class ChoreProvider extends ContentProvider {
                 ChoreContract.ChoresEntry.TABLE_NAME +
                 "." + ChoreContract.ChoresEntry.COLUMN_TYPE + "= ? ";
 
-        Log.d("RCD",selectionString);
-
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables(ChoreContract.ChoresEntry.TABLE_NAME);
 
@@ -150,7 +144,6 @@ public class ChoreProvider extends ContentProvider {
     private Cursor getUserChoresByFrequency(Uri uri, String[] projection, String frequency){
         String selectionString = ChoreContract.ChoresEntry.TABLE_NAME +
                 "." + ChoreContract.ChoresEntry.COLUMN_FREQUENCY + "=" + frequency;
-        Log.d("RCD",selectionString);
 
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables(ChoreContract.ChoresEntry.TABLE_NAME);
@@ -169,8 +162,6 @@ public class ChoreProvider extends ContentProvider {
         String selectionString = ChoreContract.ChoresEntry.TABLE_NAME +
                 "." + ChoreContract.ChoresEntry.COLUMN_TYPE + "= ? ";
 
-        Log.d("RCD",selectionString);
-
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables(ChoreContract.ChoresEntry.TABLE_NAME);
 
@@ -187,7 +178,6 @@ public class ChoreProvider extends ContentProvider {
     private Cursor getUserChoresByDueDate(Uri uri, String[] projection, String frequency){
         String selectionString = ChoreContract.ChoresEntry.TABLE_NAME +
                 "." + ChoreContract.ChoresEntry.COLUMN_NEXT_DUE + "=?";
-        Log.d("RCD",selectionString);
 
         long date = ChoreContract.ChoresEntry.getDateFromUri(uri);
 
@@ -208,7 +198,6 @@ public class ChoreProvider extends ContentProvider {
         String _id = uri.getPathSegments().get(2);
         String selectionString = ChoreContract.ChoresEntry.TABLE_NAME +
                 "." + ChoreContract.ChoresEntry._ID + "=?";
-        Log.d("RCD",selectionString);
 
         long date = ChoreContract.ChoresEntry.getDateFromUri(uri);
 
