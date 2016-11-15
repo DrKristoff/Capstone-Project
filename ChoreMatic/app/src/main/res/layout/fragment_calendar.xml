@@ -84,7 +84,7 @@
                 android:text="10"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="1"/>
+                android:text="11"/>
             <TextView
                 style="@style/calendarDayView"
                 android:text="12"/>

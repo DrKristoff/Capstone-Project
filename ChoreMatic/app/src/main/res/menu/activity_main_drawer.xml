@@ -5,24 +5,24 @@
         <item
             android:id="@+id/nav_today"
             android:icon="@drawable/ic_menu_today"
-            android:title="Today" />
+            android:title="@string/today_nav_menu" />
         <item
             android:id="@+id/nav_calendar"
             android:icon="@drawable/ic_menu_calendar"
-            android:title="Calendar" />
-        <item
+            android:title="@string/calendar_nav_menu" />
+<!--        <item
             android:id="@+id/nav_reset"
             android:icon="@drawable/ic_menu_reset"
-            android:title="Reset" />
+            android:title="Reset" />-->
 
     </group>
 
-    <item android:title="User">
+    <item android:title="@string/user_group_nav_menu">
         <menu>
             <item
                 android:id="@+id/nav_sign_out"
                 android:icon="@drawable/ic_menu_manage"
-                android:title="Sign Out" />
+                android:title="@string/sign_out_nav_menu" />
         </menu>
     </item>
 

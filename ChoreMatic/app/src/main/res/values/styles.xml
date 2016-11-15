@@ -125,4 +125,6 @@
         <item name="android:textColor">@color/colorSecondaryText</item>
     </style>
 
+    <style name="sectionLabelStyle">3</style>
+
 </resources>

@@ -159,7 +159,9 @@ public class ChoreDetailFragment extends Fragment implements LoaderManager.Loade
             if (id == DETAIL_LOADER) {
                 String choreDescription = data.getString(COL_CHORE_DESCRIPTION).toUpperCase();
                 //mDescription.setText(choreDescription);
-                appBarLayout.setTitle(choreDescription);
+                if(appBarLayout!=null){
+                    appBarLayout.setTitle(choreDescription);
+                }
 
                 roomID = data.getInt(COL_CHORE_ROOM);
 

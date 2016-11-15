@@ -11,21 +11,15 @@
     android:showDividers="middle"
     tools:context="com.sidegigapps.chorematic.activities.ChoreListActivity">
 
-    <!--
-    This layout is a two-pane layout for the Chores
-    master/detail flow.
-    
-    -->
-
-    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/chore_list"
         android:name="com.sidegigapps.chorematic.ChoreListFragment"
-        android:layout_width="@dimen/item_width"
+        android:layout_width="400dp"
         android:layout_height="match_parent"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        app:layoutManager="LinearLayoutManager"
         tools:context="com.sidegigapps.chorematic.activities.ChoreListActivity"
         tools:listitem="@layout/chore_list_item" />
 

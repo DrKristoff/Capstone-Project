@@ -3,18 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.sidegigapps.chorematic.activities.SetupActivity$PlaceholderFragment">
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/section_label"
+        style="@style/sectionLabelStyle"
         android:layout_width="match_parent"
         android:gravity="center_horizontal"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
-        android:background="@color/colorAccent"
+        android:background="@color/colorPrimary"
         android:textColor="@android:color/white"
         android:text="Setup"
         android:textSize="30sp" />
@@ -22,6 +22,7 @@
     <RelativeLayout
         android:id="@+id/homeImageLayout"
         android:layout_width="400dp"
+        android:layout_centerHorizontal="true"
         android:layout_height="400dp">
 
         <TextView
@@ -30,24 +31,40 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:textSize="35sp"
-            android:layout_margin="15dp"
-            android:layout_centerHorizontal="true"
+            android:text="Tell us about your home to get started"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:layout_centerVertical="true"
-            android:text="Tell us about your home to get started" />
+            android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/next_button"
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/numBedroomsCardView"
         android:layout_width="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
         android:padding="20dp"
+        android:layout_marginBottom="15dp"
         android:textColor="@color/colorAccent"
-        android:gravity="center_horizontal"
-        android:text="BEGIN"
-        android:textSize="36sp" />
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/next_button"
+            android:layout_width="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:textColor="@color/colorAccent"
+            android:gravity="center_horizontal"
+            android:text="BEGIN"
+            android:textSize="36sp" />
+
+    </android.support.v7.widget.CardView>
+
 
 
 </RelativeLayout>

@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -118,7 +119,6 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
                     // User is signed out
                     Log.d("RCD", "onAuthStateChanged:signed_out");
                 }
-                // ...
             }
         };
 
@@ -134,6 +134,22 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
                 .build();
     }
 
+    public void setupNavigationDrawer(){
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView profileName = (TextView) headerView.findViewById(R.id.profileName);
+        TextView profileEmail = (TextView) headerView.findViewById(R.id.profileEmail);
+
+        SharedPreferences prefs = getSharedPreferences("user_data", 0);
+        String profileNameString = prefs.getString("prefs_user_name","ChoreMatic User");
+        String profileEmailString = prefs.getString("prefs_user_email","ChoreMatic User email");
+        String profileImageUrl = prefs.getString("prefs_user_photo","ChoreMatic User");
+
+        profileName.setText(profileNameString);
+        profileEmail.setText(profileEmailString);
+        //profileImage.setIcon()
+
+    }
     public void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
@@ -153,8 +169,8 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
             Uri photoUrl = profile.getPhotoUrl();
 
             editor.putString("prefs_user_name", name);
-            editor.putString("prefs_user_email", email);
-            editor.putString("prefs_user_photo", photoUrl.toString());
+            if(email!=null) editor.putString("prefs_user_email", email);
+            if(photoUrl!=null) editor.putString("prefs_user_photo", photoUrl.toString());
             editor.apply();
         };
 

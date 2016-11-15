@@ -30,14 +30,4 @@ public class FragmentHelper {
                 return null;
         }
     }
-
-/*    public static BaseSetupFragment getSetupFragmentByString(String input, Bundle bundle){
-        switch(input){
-
-            case FLOOR_DETAILS_SETUP_FRAGMENT:
-                return FloorDetailsSetupFragment.newInstance(bundle);
-            default:
-                return null;
-        }
-    }*/
 }

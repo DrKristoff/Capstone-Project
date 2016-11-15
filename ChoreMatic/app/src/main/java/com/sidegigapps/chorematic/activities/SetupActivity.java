@@ -65,11 +65,6 @@ public class SetupActivity extends BaseActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        if(!Once.beenDone(Once.THIS_APP_INSTALL,serviceScheduled)){
-
-            Once.markDone(serviceScheduled);
-        }
-
         numFloors = 1;
         mainFloorIndex = 0;
 

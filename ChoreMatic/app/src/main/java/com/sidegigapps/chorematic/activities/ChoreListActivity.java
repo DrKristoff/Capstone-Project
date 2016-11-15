@@ -16,6 +16,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
@@ -54,6 +55,8 @@ public class ChoreListActivity extends BaseActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chore_list);
 
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(R.string.today_activity_title);
@@ -61,14 +64,6 @@ public class ChoreListActivity extends BaseActivity implements LoaderManager.Loa
         dbUtils = new ChoreDatabaseUtils(this);
         dbUtils.scheduleAllUnscheduledChores();
 
-/*        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
 
         mListView = (ListView) findViewById(R.id.chore_list);
 
@@ -76,10 +71,6 @@ public class ChoreListActivity extends BaseActivity implements LoaderManager.Loa
         mListView.setAdapter(mChoreListAdapter);
 
         if (findViewById(R.id.chore_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
             mTwoPane = true;
         }
 
@@ -94,6 +85,7 @@ public class ChoreListActivity extends BaseActivity implements LoaderManager.Loa
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        setupNavigationDrawer();
 
     }
 

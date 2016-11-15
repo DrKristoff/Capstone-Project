@@ -102,4 +102,9 @@
     <string name="widget_success_string">No chores left!  Great Job!</string>
     <string name="widget_one_left">Just one chore left!</string>
     <string name="widget_num_chores_left">%s chores left!</string>
+    <string name="in_development_toast_string">In development!  Select Sign In with Google below</string>
+    <string name="today_nav_menu">Today</string>
+    <string name="calendar_nav_menu">Calendar</string>
+    <string name="user_group_nav_menu">User</string>
+    <string name="sign_out_nav_menu">Sign Out</string>
 </resources>
