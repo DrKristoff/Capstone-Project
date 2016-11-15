@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.ChoreListActivity"
-            android:label="@string/app_name"
+            android:label="@string/today_activity_title"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".activities.ChoreDetailActivity"
@@ -54,6 +54,14 @@
             android:label="ChoreProvider"
             android:readPermission="true"
             android:writePermission="true" />
+
+        <receiver android:name=".widget.ChoreWidgetProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/widget_provider_info" />
+        </receiver>
 
         <activity
             android:name=".activities.CalendarActivity"

@@ -8,6 +8,7 @@ import android.util.TypedValue;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by ryand on 11/6/2016.
@@ -57,19 +58,25 @@ public class Utils {
         return formatDatabaseDateForUI(Long.parseLong(longString));
     }
     public static String formatDatabaseDateForUI(long databaseDate){
-        //if it's today, return "Today"
-        if(databaseDate == convertMillisecondsToDays(System.currentTimeMillis())){
-            return "Today";
-        }
-        //otherwise display day of the week
-        SimpleDateFormat formatter = new SimpleDateFormat("EEEE");
-        long milliseconds = databaseDate*24*60*60*1000;
+        long todayTimestamp = convertMillisecondsToDays(System.currentTimeMillis());
         Date date = new Date();
-        date.setTime(milliseconds);
+        SimpleDateFormat formatter;
+        //if it's today, return "Today"
+        if(databaseDate == todayTimestamp){
+            return "Today";
+        } else if(todayTimestamp-databaseDate > 7 ){
+            //otherwise display day of the week
+            formatter = new SimpleDateFormat("MM/DD");
+            long milliseconds = databaseDate*24*60*60*1000;
+            date.setTime(milliseconds);
 
+        } else {
+            //otherwise display day of the week
+            formatter = new SimpleDateFormat("EEEE");
+            long milliseconds = databaseDate*24*60*60*1000;
+            date.setTime(milliseconds);
 
-
-
+        }
         return formatter.format(date);
     }
 
@@ -113,8 +120,26 @@ public class Utils {
         }
     }
 
-    public static String getTodayString() {
+    public static String convertTodayToStringForDB() {
         long date = convertMillisecondsToDays(System.currentTimeMillis());
         return String.valueOf(date);
+    }
+
+    public static String getDateStringForWidget() {
+        SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
+        Date date = new Date();
+        date.setTime(System.currentTimeMillis());
+
+        return formatter.format(date);
+    }
+
+    public static String getStringForWidget(Context context, int numChores) {
+        if(numChores==0){
+            return context.getString(R.string.widget_success_string);
+        } else if(numChores==1){
+            return context.getString(R.string.widget_one_left);
+        } else {
+            return String.format(context.getString(R.string.widget_num_chores_left),numChores);
+        }
     }
 }

@@ -42,7 +42,6 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         setContentView(R.layout.login_activity);
         findViewById(R.id.sign_in_button).setOnClickListener(this);
 
-        Once.initialise(this);
         //testing
         findViewById(R.id.button2).setOnClickListener(this);
 

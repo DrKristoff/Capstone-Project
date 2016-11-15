@@ -13,7 +13,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ListView;
 
@@ -24,9 +23,6 @@ import com.sidegigapps.chorematic.database.ChoreContract;
 import com.sidegigapps.chorematic.database.ChoreContract.ChoresEntry;
 import com.sidegigapps.chorematic.database.ChoreDatabaseUtils;
 import com.sidegigapps.chorematic.fragments.ChoreDetailFragment;
-import com.sidegigapps.chorematic.models.Chore;
-
-import java.util.ArrayList;
 
 public class ChoreListActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>,
         NavigationView.OnNavigationItemSelectedListener  {
@@ -57,7 +53,7 @@ public class ChoreListActivity extends BaseActivity implements LoaderManager.Loa
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
+        toolbar.setTitle(R.string.today_activity_title);
 
         dbUtils = new ChoreDatabaseUtils(this);
         dbUtils.scheduleAllUnscheduledChores();
@@ -112,7 +108,7 @@ public class ChoreListActivity extends BaseActivity implements LoaderManager.Loa
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri mUri = ChoreContract.ChoresEntry.CONTENT_URI
-                .buildUpon().appendPath("date").appendPath(Utils.getTodayString())
+                .buildUpon().appendPath("date").appendPath(Utils.convertTodayToStringForDB())
                 .build();
         if ( null != mUri ) {
             return new CursorLoader(

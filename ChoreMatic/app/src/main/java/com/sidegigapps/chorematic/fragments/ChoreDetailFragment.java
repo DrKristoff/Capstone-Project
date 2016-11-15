@@ -27,6 +27,7 @@ public class ChoreDetailFragment extends Fragment implements LoaderManager.Loade
     public static final String DETAIL_URI = "URI";
     private Uri mUri;
 
+    public int choreID;
     private int floorIndex = -1;
     private int roomID = -1;
     private String floorName;
@@ -162,22 +163,18 @@ public class ChoreDetailFragment extends Fragment implements LoaderManager.Loade
 
                 roomID = data.getInt(COL_CHORE_ROOM);
 
-                /*String floorName = data.getString(COL_CHORE_FLOOR);
-                mFloorNameTextView.setText(floorName);
-
-                String roomName = data.getString(COL_CHORE_ROOM);
-                mRoomNameTextView.setText(roomName);*/
+                choreID = data.getInt(COL_CHORE_ID);
 
                 int effortResource = Utils.getImageResourceFromText(data.getString(COL_CHORE_EFFORT));
                 mEffortImageView.setImageResource(effortResource);
                 mEffortImageView.setContentDescription(data.getString(COL_CHORE_EFFORT));
 
                 String frequency = data.getString(COL_CHORE_FREQUENCY);
-                mFrequencyTextView.setText(frequency);
+                mFrequencyTextView.setText(frequency + " " + getString(R.string.days_string));
 
                 String lastTimestamp = data.getString(COL_CHORE_LAST);
                 if(lastTimestamp.equals("-1")){
-                    mLastTimestampTextView.setText("N/A");
+                    mLastTimestampTextView.setText(R.string.not_applicable_string);
                 } else {
                     mLastTimestampTextView.setText(Utils.formatDatabaseDateForUI(lastTimestamp));
                 }
@@ -185,7 +182,7 @@ public class ChoreDetailFragment extends Fragment implements LoaderManager.Loade
 
                 String nextTimestamp = data.getString(COL_CHORE_NEXT);
                 if(nextTimestamp.equals("-1")){
-                    mNextTimestampTextView.setText("unscheduled");
+                    mNextTimestampTextView.setText(R.string.unscheduled_string);
                 } else {
                     mNextTimestampTextView.setText(Utils.formatDatabaseDateForUI(nextTimestamp));
                 }

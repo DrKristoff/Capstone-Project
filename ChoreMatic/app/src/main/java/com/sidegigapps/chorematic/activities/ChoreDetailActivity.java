@@ -9,8 +9,10 @@ import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.sidegigapps.chorematic.R;
+import com.sidegigapps.chorematic.database.ChoreDatabaseUtils;
 import com.sidegigapps.chorematic.fragments.ChoreDetailFragment;
 
 /**
@@ -20,6 +22,8 @@ import com.sidegigapps.chorematic.fragments.ChoreDetailFragment;
  * in a {@link ChoreListActivity}.
  */
 public class ChoreDetailActivity extends BaseActivity {
+
+    ChoreDetailFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +36,10 @@ public class ChoreDetailActivity extends BaseActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //mark chore as done
+                ChoreDatabaseUtils utils = new ChoreDatabaseUtils(ChoreDetailActivity.this);
+                utils.markChoreAsDoneAndReschedule(fragment.choreID);
+                showChoreCompleteToast();
+                navigateTo(TodayActivity);
             }
         });
 
@@ -48,7 +55,7 @@ public class ChoreDetailActivity extends BaseActivity {
             Bundle arguments = new Bundle();
             arguments.putParcelable(ChoreDetailFragment.DETAIL_URI, getIntent().getData());
 
-            ChoreDetailFragment fragment = new ChoreDetailFragment();
+            fragment = new ChoreDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.chore_detail_container, fragment)

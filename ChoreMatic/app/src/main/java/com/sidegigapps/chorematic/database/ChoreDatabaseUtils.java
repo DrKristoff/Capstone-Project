@@ -51,6 +51,29 @@ public class ChoreDatabaseUtils {
         Log.d("RCD","rows updated: " + String.valueOf(rowsUpdated));
     }
 
+    public int getNumChoresLeftTodayForWidget(){
+        Uri uri = ChoreContract.ChoresEntry.CONTENT_URI;
+        String selectionClause = ChoreContract.ChoresEntry.TABLE_NAME +"." +
+                ChoreContract.ChoresEntry.COLUMN_NEXT_DUE + "=?";
+        String [] selectionArgs = new String[] {
+                Utils.convertTodayToStringForDB()
+        };
+        String[] projection = new String[]{
+                ChoreContract.ChoresEntry._ID
+        };
+
+        Cursor cursor = context.getContentResolver().query(
+                uri,
+                projection,
+                selectionClause,
+                selectionArgs,
+                null
+        );
+
+        return cursor.getCount();
+
+    }
+
     public void scheduleAllUnscheduledChores(){
         //assign all due dates to today for testing
         Uri uri = ChoreContract.ChoresEntry.CONTENT_URI;

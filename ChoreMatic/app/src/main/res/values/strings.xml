@@ -95,4 +95,11 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_calendar">Calendar</string>
+    <string name="today_activity_title">Today\'s Chores</string>
+    <string name="days_string">days</string>
+    <string name="not_applicable_string">N/A</string>
+    <string name="unscheduled_string">unscheduled</string>
+    <string name="widget_success_string">No chores left!  Great Job!</string>
+    <string name="widget_one_left">Just one chore left!</string>
+    <string name="widget_num_chores_left">%s chores left!</string>
 </resources>

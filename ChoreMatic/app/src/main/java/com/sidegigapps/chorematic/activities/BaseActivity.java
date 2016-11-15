@@ -82,6 +82,8 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onCreate(savedInstanceState);
         baseActivity = this;
 
+        Once.initialise(this);
+
         mAuth = FirebaseAuth.getInstance();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -136,6 +138,10 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
+    }
+
+    public void showChoreCompleteToast(){
+        Toast.makeText(BaseActivity.this,"Chore marked complete",Toast.LENGTH_SHORT).show();
     }
 
     private void saveUserProfileData(FirebaseUser user){
