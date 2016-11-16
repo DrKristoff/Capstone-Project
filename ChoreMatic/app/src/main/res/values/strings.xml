@@ -210,4 +210,8 @@
     <string name="Bedroom">Bedroom</string>
     <string name="Bathroom">Bathroom</string>
     <string name="firebaseBucket">gs://chore-app-4c0eb.appspot.com</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="status">STATUS</string>
+    <string name="chooser">Chooser</string>
 </resources>
