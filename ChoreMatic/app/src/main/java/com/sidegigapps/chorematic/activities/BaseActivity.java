@@ -240,22 +240,17 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        Log.d(getString(R.string.rcd_debug_tag), "firebaseAuthWithGoogle:" + acct.getId());
-
-
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(getString(R.string.rcd_debug_tag), "signInWithCredential:onComplete:" + task.isSuccessful());
 
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            Log.w(getString(R.string.rcd_debug_tag),"signInWithCredential", task.getException());
-                            Toast.makeText(BaseActivity.this, "Authentication failed.",
+                            Toast.makeText(BaseActivity.this, R.string.auth_failed,
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -265,7 +260,6 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
 
 
     private void handleSignInResult(GoogleSignInResult result) {
-        Log.d(getString(R.string.rcd_debug_tag), "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
@@ -311,6 +305,6 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Toast.makeText(this,"Connection Failed",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.connection_failed,Toast.LENGTH_SHORT).show();
     }
 }

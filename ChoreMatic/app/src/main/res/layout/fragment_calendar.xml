@@ -22,25 +22,25 @@
             android:layout_height="wrap_content">
             <TextView
                 style="@style/calendarDaysLabel"
-                android:text="Sunday"/>
+                android:text="@string/sunday"/>
             <TextView
                 style="@style/calendarDaysLabel"
-                android:text="Monday"/>
+                android:text="@string/monday"/>
             <TextView
                 style="@style/calendarDaysLabel"
-                android:text="Tuesday"/>
+                android:text="@string/tuesday"/>
             <TextView
                 style="@style/calendarDaysLabel"
-                android:text="Wednesday"/>
+                android:text="@string/wednesday"/>
             <TextView
                 style="@style/calendarDaysLabel"
-                android:text="Thursday"/>
+                android:text="@string/thursday"/>
             <TextView
                 style="@style/calendarDaysLabel"
-                android:text="Friday"/>
+                android:text="@string/friday"/>
             <TextView
                 style="@style/calendarDaysLabel"
-                android:text="Saturday"/>
+                android:text="@string/saturday"/>
         </TableRow>
 
         <!--DAYS -->
@@ -49,25 +49,25 @@
             android:layout_height="wrap_content">
             <TextView
                 style="@style/calendarDayView"
-                android:text="1"/>
+                android:text="@string/_1"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="2"/>
+                android:text="@string/_2"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="3"/>
+                android:text="@string/_3"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="4"/>
+                android:text="@string/_4"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="5"/>
+                android:text="@string/_5"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="6"/>
+                android:text="@string/_6"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="7"/>
+                android:text="@string/_7"/>
         </TableRow>
         <!--DAYS -->
         <TableRow
@@ -75,25 +75,25 @@
             android:layout_height="wrap_content">
             <TextView
                 style="@style/calendarDayView"
-                android:text="8"/>
+                android:text="@string/_8"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="9"/>
+                android:text="@string/_9"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="10"/>
+                android:text="@string/_10"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="11"/>
+                android:text="@string/_11"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="12"/>
+                android:text="@string/_12"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="13"/>
+                android:text="@string/_13"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="14"/>
+                android:text="@string/_14"/>
         </TableRow>
         <!--DAYS -->
         <TableRow
@@ -101,25 +101,25 @@
             android:layout_height="wrap_content">
             <TextView
                 style="@style/calendarDayView"
-                android:text="15"/>
+                android:text="@string/_15"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="16"/>
+                android:text="@string/_16"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="17"/>
+                android:text="@string/_17"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="18"/>
+                android:text="@string/_18"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="19"/>
+                android:text="@string/_19"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="20"/>
+                android:text="@string/_20"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="21"/>
+                android:text="@string/_21"/>
         </TableRow>
         <!--DAYS -->
         <TableRow
@@ -127,25 +127,25 @@
             android:layout_height="wrap_content">
             <TextView
                 style="@style/calendarDayView"
-                android:text="22"/>
+                android:text="@string/_22"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="23"/>
+                android:text="@string/_23"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="24"/>
+                android:text="@string/_24"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="25"/>
+                android:text="@string/_25"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="26"/>
+                android:text="@string/_26"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="27"/>
+                android:text="@string/_27"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="28"/>
+                android:text="@string/_28"/>
         </TableRow>
         <!--DAYS -->
         <TableRow
@@ -153,25 +153,25 @@
             android:layout_height="wrap_content">
             <TextView
                 style="@style/calendarDayView"
-                android:text="29"/>
+                android:text="@string/_29"/>
             <TextView
                 style="@style/calendarDayView"
-                android:text="30"/>
+                android:text="@string/_30"/>
             <TextView
                 style="@style/calendarDayViewAlternateMonth"
-                android:text="1"/>
+                android:text="@string/_1"/>
             <TextView
                 style="@style/calendarDayViewAlternateMonth"
-                android:text="2"/>
+                android:text="@string/_2"/>
             <TextView
                 style="@style/calendarDayViewAlternateMonth"
-                android:text="3"/>
+                android:text="@string/_3"/>
             <TextView
                 style="@style/calendarDayViewAlternateMonth"
-                android:text="4"/>
+                android:text="@string/_4"/>
             <TextView
                 style="@style/calendarDayViewAlternateMonth"
-                android:text="5"/>
+                android:text="@string/_5"/>
         </TableRow>
 
     </TableLayout>

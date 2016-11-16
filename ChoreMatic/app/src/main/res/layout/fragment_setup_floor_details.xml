@@ -85,7 +85,7 @@
         android:padding="20dp"
         android:textColor="@color/colorAccent"
         android:gravity="center_horizontal"
-        android:text="BACK"
+        android:text="@string/setup_back"
         android:textSize="36sp" />
 
     <TextView
@@ -97,7 +97,7 @@
         android:padding="20dp"
         android:textColor="@color/colorAccent"
         android:gravity="center_horizontal"
-        android:text="NEXT"
+        android:text="@string/setup_next"
         android:textSize="36sp" />
 
 
