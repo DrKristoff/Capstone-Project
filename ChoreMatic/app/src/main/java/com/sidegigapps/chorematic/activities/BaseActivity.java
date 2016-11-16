@@ -165,7 +165,7 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
             Uri photoUrl = profile.getPhotoUrl();
 
             editor.putString(getString(R.string.prefs_user_name), name);
-            if(email!=null) editor.putString("getString(R.string.prefs_user_email)", email);
+            if(email!=null) editor.putString(getString(R.string.prefs_user_email), email);
             if(photoUrl!=null) editor.putString(getString(R.string.prefs_user_photo), photoUrl.toString());
             editor.apply();
         };

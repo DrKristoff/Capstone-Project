@@ -41,10 +41,10 @@ public class NumBedsAndBathsFragment extends BaseSetupFragment implements View.O
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            floorIndex = bundle.getInt("index", 99);
-            description = bundle.getString("description");
-            hasBedrooms = bundle.getBoolean("hasBedrooms");
-            hasBathrooms = bundle.getBoolean("hasBathrooms");
+            floorIndex = bundle.getInt(getString(R.string.index), 99);
+            description = bundle.getString(getString(R.string.description));
+            hasBedrooms = bundle.getBoolean(getString(R.string.hasBedrooms));
+            hasBathrooms = bundle.getBoolean(getString(R.string.hasBathrooms));
         }
     }
 

@@ -123,7 +123,6 @@ public class ChoreDetailFragment extends Fragment implements LoaderManager.Loade
                     .appendPath(String.valueOf(roomID))
                     .build();
 
-            Log.d(getString(R.string.rcd_debug_tag),"ROOM QUERY: " + roomUri.toString());
             return new CursorLoader(
                     getActivity(),
                     roomUri,
@@ -136,7 +135,6 @@ public class ChoreDetailFragment extends Fragment implements LoaderManager.Loade
             Uri floorUri = ChoreContract.FloorsEntry.CONTENT_URI.buildUpon()
                     .appendPath(String.valueOf(floorIndex))
                     .build();
-            Log.d(getString(R.string.rcd_debug_tag),"FLOOR QUERY: " + floorUri.toString());
             return new CursorLoader(
                     getActivity(),
                     floorUri,
@@ -167,7 +165,7 @@ public class ChoreDetailFragment extends Fragment implements LoaderManager.Loade
 
                 choreID = data.getInt(COL_CHORE_ID);
 
-                int effortResource = Utils.getImageResourceFromText(data.getString(COL_CHORE_EFFORT));
+                int effortResource = Utils.getImageResourceFromText(data.getString(COL_CHORE_EFFORT),getContext());
                 mEffortImageView.setImageResource(effortResource);
                 mEffortImageView.setContentDescription(data.getString(COL_CHORE_EFFORT));
 

@@ -191,4 +191,23 @@
     <string name="connection_failed">Connection Failed</string>
     <string name="disconnect_account">Disconnect Account</string>
     <string name="example_firebase_detail">Firebase User ID: 123456789abc</string>
+    <string name="th_suffix">th</string>
+    <string name="st_suffix">st</string>
+    <string name="nd_suffix">nd</string>
+    <string name="rd_suffix">rd</string>
+    <string name="th__suffix">th</string>
+    <string name="low">low</string>
+    <string name="medium">medium</string>
+    <string name="high">high</string>
+    <string name="widget_string_format">MMMM dd, yyyy</string>
+    <string name="fragment_question">Fragment Question</string>
+    <string name="floor_index">index</string>
+    <string name="description">description</string>
+    <string name="index">index</string>
+    <string name="hasBedrooms">hasBedrooms</string>
+    <string name="hasBathrooms">hasBathrooms</string>
+    <string name="numFloors">numFloors</string>
+    <string name="Bedroom">Bedroom</string>
+    <string name="Bathroom">Bathroom</string>
+    <string name="firebaseBucket">gs://chore-app-4c0eb.appspot.com</string>
 </resources>

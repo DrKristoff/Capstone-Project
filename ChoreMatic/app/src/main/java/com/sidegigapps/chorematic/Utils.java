@@ -33,7 +33,7 @@ public class Utils {
 
         if(numFloors>2){
             for(int i =0; i < numFloors;i++) {
-                floorNamesArray[i] = getOrdinalNumber(i+1);
+                floorNamesArray[i] = getOrdinalNumber(context, i+1);
             }
 
         }
@@ -80,18 +80,18 @@ public class Utils {
         return formatter.format(date);
     }
 
-    public static String getOrdinalNumber(int number){
+    public static String getOrdinalNumber(Context context, int number){
             //0 > 1
             if(!(number >= 1 && number <= 31)) return null;
 
             if (number >= 11 && number <= 13) {
-                return number + "th";
+                return number + context.getString(R.string.th_suffix);
             }
             switch (number % 10) {
-                case 1:  return number + "st";
-                case 2:  return number + "nd";
-                case 3:  return number + "rd";
-                default: return number + "th";
+                case 1:  return number + context.getString(R.string.st_suffix);
+                case 2:  return number + context.getString(R.string.nd_suffix);
+                case 3:  return number + context.getString(R.string.rd_suffix);
+                default: return number + context.getString(R.string.th__suffix);
             }
 
     }
@@ -107,17 +107,22 @@ public class Utils {
         return color;
     }
 
-    public static int getImageResourceFromText(String string) {
-        switch(string){
-            case "low":
-                return R.drawable.ic_low;
-            case "medium":
-                return R.drawable.ic_medium;
-            case "high":
-                return R.drawable.ic_high;
-            default:
-                return R.drawable.ic_high;
+    public static int getImageResourceFromText(String string, Context context) {
+        String low =context.getString(R.string.low);
+        String medium = context.getString(R.string.medium);
+        String high = context.getString(R.string.high);
+        
+        if(string.equals(low)) {
+            return R.drawable.ic_low;
+        } else if (string.equals(medium)){
+            return R.drawable.ic_medium;
+        } else if (string.equals(high)){
+            return R.drawable.ic_high;
+            
+        } else {
+            return R.drawable.ic_high;
         }
+        
     }
 
     public static String convertTodayToStringForDB() {
@@ -125,8 +130,8 @@ public class Utils {
         return String.valueOf(date);
     }
 
-    public static String getDateStringForWidget() {
-        SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
+    public static String getDateStringForWidget(Context context) {
+        SimpleDateFormat formatter = new SimpleDateFormat(context.getString(R.string.widget_string_format), Locale.US);
         Date date = new Date();
         date.setTime(System.currentTimeMillis());
 

@@ -41,8 +41,8 @@ public class FloorDetailsSetupFragment extends BaseSetupFragment implements View
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            floorIndex = bundle.getInt("index", 1);
-            description = bundle.getString("description");
+            floorIndex = bundle.getInt(getString(R.string.floor_index), 1);
+            description = bundle.getString(getString(R.string.description));
         }
     }
 
@@ -73,8 +73,6 @@ public class FloorDetailsSetupFragment extends BaseSetupFragment implements View
                 roomsSelected.add(((CheckBox) nextChild).getText().toString());
             }
         }
-
-        Log.d(getString(R.string.rcd_debug_tag),"Size of result: " + String.valueOf(roomsSelected.size()));
 
     }
 
